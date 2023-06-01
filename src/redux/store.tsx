@@ -1,10 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { useDispatch } from 'react-redux'
-import { SliceHome } from './SliceHome'
+import SliceAuth from './SliceAuth'
 const store = configureStore({
   reducer:{
-    // home:SliceHome,
-    
+    auth: SliceAuth,
   }
 })
 

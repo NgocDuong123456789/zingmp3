@@ -1,29 +1,32 @@
-import {useRoutes} from 'react-router-dom'
-import {path} from './contains/path'
-import {LayoutMain} from './Layouts/LayoutMain'
-import { Home, Login, Register ,NotFound} from './defaultPath'
+import { useRoutes } from 'react-router-dom'
+import { path } from './contains/path'
+import { LayoutMain } from './Layouts/LayoutMain'
+import { Home, Login, Register } from './defaultPath'
 
-const Routes =()=>{
-  const router=useRoutes([
+const Routes = () => {
+  const router = useRoutes([
     {
-      path:path.home,
-      element:<LayoutMain><Home /></LayoutMain>
+      path: path.home,
+      element: (
+        <LayoutMain>
+          <Home />
+        </LayoutMain>
+      )
     },
     {
-      path:path.home,
-      element:<LayoutMain><Login /></LayoutMain>
+      path: path.login,
+      element: (
+       
+          <Login />
+      
+      )
     },
     {
-      path:path.home,
-      element:<LayoutMain><Register /></LayoutMain>
-    },
-    {
-      path:'*',
-      element:<LayoutMain><NotFound /></LayoutMain>
-    },
-
+      path: path.register,
+      element: <Register />
+    }
   ])
-  return router;
+  return router
 }
 
 export default Routes
