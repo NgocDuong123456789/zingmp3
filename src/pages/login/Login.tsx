@@ -9,12 +9,17 @@ import { useForm } from 'react-hook-form'
 import { SchemaType, schema } from '../../components/Validation/Validation'
 const Schema = schema.pick(['password', 'email', 'confirm_password'])
 import { fetchLogin } from '~/redux/SliceAuth'
-
+import { useContext } from 'react'
+import { AppContext } from '~/useContext/Context'
+import { Input } from '../../components/Input/Input'
+import { Button } from '~/components/Button/Button'
+import classNames from 'classnames'
 export const Login = () => {
+  const { setAuthentication, setProfile, profile } = useContext(AppContext)
   const navigate = useNavigate()
   const dispath = useAppDispatch()
   const RegisterData = useSelector((state: RootState) => state.auth)
-  console.log(RegisterData)
+
   const {
     register,
     handleSubmit,
@@ -29,11 +34,12 @@ export const Login = () => {
     resolver: yupResolver(Schema)
   })
   const onSubmit = handleSubmit((data) => {
-    // console.log(data)
     dispath(fetchLogin({ email: data.email, password: data.password }))
       .unwrap()
       .then((res) => {
         navigate(path.home)
+        setAuthentication(true)
+        setProfile(res.data)
         return res
       })
       .catch((err) => {
@@ -48,7 +54,7 @@ export const Login = () => {
   return (
     <div className='w-full relative rounded-lg'>
       <div className='h-[100vh] w-full'>
-        <img src={imageLogin} alt='ảnh bìa đăng ký' className='w-full  object-contain ' />
+        <img src={imageLogin} alt='ảnh bìa đăng ký' className='w-full  object-cover h-full ' />
       </div>
 
       <form
@@ -57,49 +63,32 @@ export const Login = () => {
         className='w-[500px] bg-[#5A6970] absolute top-[50%] translate-y-[-50%] left-[50px] p-4 rounded-lg '
       >
         <h1 className='flex items-center w-full justify-center py-4 text-[white] text-[30px]'>ĐĂNG NHẬP</h1>
-        <div className='flex flex-col h-[100px]'>
-          <label htmlFor='email' className='text-[white] text-[20px]'>
-            email
-          </label>
-          <input
-            type='text'
-            id='email'
-            {...register('email')}
-            className='h-[45px] outline-none rounded-lg pl-[8px] my-[4px]'
-            placeholder='Enter email'
-          />
-          {errors && <small>{errors.email?.message}</small>}
-        </div>
-        <div className='flex flex-col h-[100px]'>
-          <label htmlFor='password' className='text-[white] text-[20px]'>
-            password
-          </label>
-          <input
-            type='text'
-            id='password'
-            {...register('password')}
-            className='h-[45px] outline-none rounded-lg pl-[8px] my-[4px]'
-            placeholder='Enter password'
-          />
-          {errors && <small>{errors.password?.message}</small>}
-        </div>
-        <div className='flex flex-col h-[100px]'>
-          <label htmlFor='name' className='text-[white] text-[20px]'>
-            confirm password
-          </label>
-          <input
-            type='text'
-            id='confirm_password'
-            {...register('confirm_password')}
-            className='h-[45px] outline-none rounded-lg pl-[8px] my-[4px]'
-            placeholder='Enter confirm password'
-          />
-          {errors && <small>{errors.confirm_password?.message}</small>}
-        </div>
-        <button className='flex items-center bg-[#F9A252] w-full h-[50px] rounded-lg text-[white] m-auto justify-center gap-2 mt-5 mb-4'>
-          {RegisterData.isLoading && <Skeleton />}
-          <span>ĐĂNG NHẬP</span>
-        </button>
+
+        <Input placeholder='Enter Email' id='email' register={register('email')} errorMessage={errors.email?.message} />
+        <Input
+          placeholder='Enter Password'
+          id='password'
+          register={register('password')}
+          errorMessage={errors.password?.message}
+        />
+        <Input
+          placeholder='Enter Confirm_passowrd'
+          id='confirm_password'
+          register={register('confirm_password')}
+          errorMessage={errors.confirm_password?.message}
+        />
+        <Button
+          isLoading={RegisterData.isLoading}
+          className={classNames(
+            'flex items-center bg-[#F9A252] w-full h-[50px] rounded-lg text-[white] m-auto justify-center gap-2 mt-5 mb-4',
+            {
+              'cursor-not-allowed': RegisterData.isLoading === true,
+              'cursor-pointer': !RegisterData.isLoading
+            }
+          )}
+        >
+          ĐĂNG NHẬP
+        </Button>
         <div className='flex items-center text-[white] w-full justify-end gap-2'>
           <span>Bạn có tài khoản chưa ?</span>
           <Link to={path.register} className='text-[#FF0A0A]'>

@@ -1,4 +1,4 @@
-import { userProp } from '~/types/register.types'
+import { userProp } from '~/types/user.types'
 
 export const saveAccessToken = (access_token: string) => {
   return localStorage.setItem('access_token', access_token)
@@ -14,4 +14,8 @@ export const getProfile = () => {
 
 export const saveProfile = (profile: userProp) => {
   return localStorage.setItem('profile', JSON.stringify(profile))
+}
+
+export const RemoveLocal=()=>{
+   return localStorage.clear();
 }

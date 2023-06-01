@@ -2,7 +2,14 @@ import { HeadlessTippy } from '../Tippy/Tippy'
 import { Icons } from '../../helper/icons'
 import { Link } from 'react-router-dom'
 import { path } from '../../contains/path'
+import { useContext } from 'react'
+import { AppContext } from '~/useContext/Context'
+import { Input } from '../Input/Input'
+import { GenerateSideBar } from '../GenerateSideBar/GenerateSideBar'
+import { Button } from '../Button/Button'
 const Header = () => {
+  const { authentication, profile } = useContext(AppContext)
+  console.log(authentication, profile)
   return (
     <header className='w-full h-[75px] flex items-center justify-between bg-[#181122] text-[white] px-7'>
       <div className='flex items-center cursor-pointer'>
@@ -34,6 +41,7 @@ const Header = () => {
             placeholder='Tìm kiếm bài hát, nghệ sĩ,lời bài hát...'
             className='h-[40px] w-[350px] rounded-full pl-8  bg-[#423C4B] outline-none'
           />
+          
           <Icons.BsSearch className='w-5 h-5 absolute left-[7px] top-[50%] text-[black] translate-y-[-50%] fill-[white] ' />
         </div>
       </div>
@@ -178,8 +186,9 @@ const Header = () => {
                   <path strokeLinecap='round' strokeLinejoin='round' d='M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25' />
                 </svg>
               </div>
-              <div className='flex item-center justify-between py-3 px-4 hover:bg-[hsla(0,0%,100%,0.1)] hover:rounded-lg'>
-                <div className='flex items-center  gap-2'>
+             
+              <GenerateSideBar className='header'>
+              <div className='flex items-center  gap-2'>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     fill='none'
@@ -207,9 +216,10 @@ const Header = () => {
                 >
                   <path strokeLinecap='round' strokeLinejoin='round' d='M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25' />
                 </svg>
-              </div>
-              <div className='flex item-center justify-between py-3 px-4 hover:bg-[hsla(0,0%,100%,0.1)] hover:rounded-lg'>
-                <div className='flex items-center  gap-2'>
+              </GenerateSideBar>
+        
+              <GenerateSideBar className='header'>
+              <div className='flex items-center  gap-2'>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     fill='none'
@@ -226,10 +236,18 @@ const Header = () => {
                   </svg>
                   <span>Quảng cáo</span>
                 </div>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
-  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
-</svg>
-              </div>
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                  strokeWidth={1.5}
+                  stroke='currentColor'
+                  className='w-4 h-4'
+                >
+                  <path strokeLinecap='round' strokeLinejoin='round' d='M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25' />
+                </svg>
+              </GenerateSideBar>
+              
             </div>
           }
         >
@@ -255,31 +273,111 @@ const Header = () => {
 
         <HeadlessTippy
           childrenProps={
-            <Link to={path.register}>
-              <div className='bg-[#34224F] rounded-lg w-[350px] h-[70px] flex items-center justify-center'>
-                <button className='text-[white] bg-[rgb(139,69,202)] h-[40px] w-[80%] rounded-full font-bold'>
-                  Đăng nhập
-                </button>
+            !authentication ? (
+              <Link to={path.register}>
+                <div className='bg-[#34224F] rounded-lg w-[350px] h-[70px] flex items-center justify-center'>
+                 
+                  <Button className='text-[white] bg-[rgb(139,69,202)] h-[40px] w-[80%] rounded-full font-bold'>Đăng Nhập</Button>
+                </div>
+              </Link>
+            ) : (
+              <div>
+                <Link to={path.register}>
+                  <div className='w-[250px] bg-[#34224F] text-[white] rounded-lg font- text-[15px]'>
+                    <div className='flex items-center gap-3 px-4  py-3 border-b-2 border-[#221A2D]'>
+                      <img src={profile?.image} alt='avatar' className='w-[50px] h-[50px] object-cover' />
+
+                      <span className='font-bold'>{profile?.user_name}</span>
+                    </div>
+                    <div className='flex item-center justify-between py-3 px-4 hover:bg-[hsla(0,0%,100%,0.1)] hover:rounded-lg'>
+                      <div className='flex items-center  gap-2'>
+                        <svg
+                          xmlns='http://www.w3.org/2000/svg'
+                          fill='none'
+                          viewBox='0 0 24 24'
+                          strokeWidth={1.5}
+                          stroke='currentColor'
+                          className='w-6 h-6'
+                        >
+                          <path
+                            strokeLinecap='round'
+                            strokeLinejoin='round'
+                            d='M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636'
+                          />
+                        </svg>
+
+                        <span>Danh sách chặn</span>
+                      </div>
+                    </div>
+                    <div className='flex item-center justify-between py-3 px-4 hover:bg-[hsla(0,0%,100%,0.1)] hover:rounded-lg'>
+                      <div className='flex items-center  gap-2'>
+                        <svg
+                          xmlns='http://www.w3.org/2000/svg'
+                          fill='none'
+                          viewBox='0 0 24 24'
+                          strokeWidth={1.5}
+                          stroke='currentColor'
+                          className='w-6 h-6'
+                        >
+                          <path
+                            strokeLinecap='round'
+                            strokeLinejoin='round'
+                            d='M11.412 15.655L9.75 21.75l3.745-4.012M9.257 13.5H3.75l2.659-2.849m2.048-2.194L14.25 2.25 12 10.5h8.25l-4.707 5.043M8.457 8.457L3 3m5.457 5.457l7.086 7.086m0 0L21 21'
+                          />
+                        </svg>
+
+                        <span>Tải lên</span>
+                      </div>
+                    </div>
+                    <div className='flex item-center justify-between py-3 px-4 hover:bg-[hsla(0,0%,100%,0.1)] hover:rounded-lg'>
+                      <div className='flex items-center  gap-2'>
+                        <svg
+                          xmlns='http://www.w3.org/2000/svg'
+                          fill='none'
+                          viewBox='0 0 24 24'
+                          strokeWidth={1.5}
+                          stroke='currentColor'
+                          className='w-6 h-6'
+                        >
+                          <path
+                            strokeLinecap='round'
+                            strokeLinejoin='round'
+                            d='M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75'
+                          />
+                        </svg>
+
+                        <span>Đăng Xuất</span>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
               </div>
-            </Link>
+            )
           }
         >
-          <div className='bg-[#2F2739] rounded-[50%] p-2'>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              strokeWidth={1.5}
-              stroke='currentColor'
-              className='w-6 h-6'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                d='M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z'
-              />
-            </svg>
-          </div>
+          {!authentication ? (
+            <div className='bg-[#2F2739] rounded-[50%] p-2'>
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                fill='none'
+                viewBox='0 0 24 24'
+                strokeWidth={1.5}
+                stroke='currentColor'
+                className='w-6 h-6'
+              >
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  d='M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z'
+                />
+              </svg>
+            </div>
+          ) : (
+            <div className='flex items-center gap-2'>
+              <img src={profile?.image} alt='avatar' className='w-[40px] h-[40px] object-cover rounded-full' />
+              <span className='text-[white]'>{profile?.user_name}</span>
+            </div>
+          )}
         </HeadlessTippy>
       </div>
     </header>

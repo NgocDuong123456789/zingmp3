@@ -1,6 +1,6 @@
 import { createContext, useState } from 'react'
 import { getAccessToken, getProfile } from '~/helper/localstore'
-import { userProp } from '~/types/register.types'
+import { userProp } from '~/types/user.types'
 
 interface ContextProp {
   profile: null | userProp
