@@ -41,7 +41,7 @@ const Header = () => {
             placeholder='Tìm kiếm bài hát, nghệ sĩ,lời bài hát...'
             className='h-[40px] w-[350px] rounded-full pl-8  bg-[#423C4B] outline-none'
           />
-          
+
           <Icons.BsSearch className='w-5 h-5 absolute left-[7px] top-[50%] text-[black] translate-y-[-50%] fill-[white] ' />
         </div>
       </div>
@@ -125,7 +125,7 @@ const Header = () => {
                   <path strokeLinecap='round' strokeLinejoin='round' d='M8.25 4.5l7.5 7.5-7.5 7.5' />
                 </svg>
               </div>
-              <div className='w-[80%] h-[1px] bg-[#170F23] m-auto my-5'></div>
+              <div className='w-[80%] h-[1px] bg-[#170F23] m-auto my-[0.5rem]'></div>
               <div className='flex item-center justify-between py-3 px-4 hover:bg-[hsla(0,0%,100%,0.1)] hover:rounded-lg'>
                 <div className='flex items-center  gap-2'>
                   <svg
@@ -186,9 +186,9 @@ const Header = () => {
                   <path strokeLinecap='round' strokeLinejoin='round' d='M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25' />
                 </svg>
               </div>
-             
+
               <GenerateSideBar className='header'>
-              <div className='flex items-center  gap-2'>
+                <div className='flex items-center  gap-2'>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     fill='none'
@@ -217,9 +217,9 @@ const Header = () => {
                   <path strokeLinecap='round' strokeLinejoin='round' d='M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25' />
                 </svg>
               </GenerateSideBar>
-        
+
               <GenerateSideBar className='header'>
-              <div className='flex items-center  gap-2'>
+                <div className='flex items-center  gap-2'>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     fill='none'
@@ -247,7 +247,6 @@ const Header = () => {
                   <path strokeLinecap='round' strokeLinejoin='round' d='M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25' />
                 </svg>
               </GenerateSideBar>
-              
             </div>
           }
         >
@@ -276,8 +275,9 @@ const Header = () => {
             !authentication ? (
               <Link to={path.register}>
                 <div className='bg-[#34224F] rounded-lg w-[350px] h-[70px] flex items-center justify-center'>
-                 
-                  <Button className='text-[white] bg-[rgb(139,69,202)] h-[40px] w-[80%] rounded-full font-bold'>Đăng Nhập</Button>
+                  <Button className='text-[white] bg-[rgb(139,69,202)] h-[40px] w-[80%] rounded-full font-bold'>
+                    Đăng Nhập
+                  </Button>
                 </div>
               </Link>
             ) : (
