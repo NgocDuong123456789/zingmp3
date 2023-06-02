@@ -4,14 +4,13 @@ import { Link } from 'react-router-dom'
 import { path } from '../../contains/path'
 import { useContext } from 'react'
 import { AppContext } from '~/useContext/Context'
-import { Input } from '../Input/Input'
 import { GenerateSideBar } from '../GenerateSideBar/GenerateSideBar'
 import { Button } from '../Button/Button'
 const Header = () => {
   const { authentication, profile } = useContext(AppContext)
-  console.log(authentication, profile)
+
   return (
-    <header className='w-full h-[75px] flex items-center justify-between bg-[#181122] text-[white] px-7 fixed top-0  overflow-hidden'>
+    <header className='h-[75px] flex items-center justify-between bg-[#1F182B] text-[white] px-7 w-[83.33333%]  top-0 fixed '>
       <div className='flex items-center cursor-pointer'>
         <div className='flex items-center gap-3'>
           <svg

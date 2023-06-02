@@ -11,8 +11,8 @@ export const Abum = () => {
   const playList = (homeList as any)?.data as playList
   console.log(playList)
   return (
-    <div className='grid grid-cols-12 px-[1.75rem] bg-[#170F23] text-[white] gap-[50px] py-[100px]'>
-      <div className=' col-span-3 flex flex-col  '>
+    <div className='grid grid-cols-12 px-[1.75rem] bg-[#170F23] text-[white] gap-[20px] py-[100px]'>
+      <div className=' col-span-3 flex flex-col w-full items-center  '>
         <img
           src={playList?.thumbnail}
           alt='ảnh đại diện abum nhạc'
@@ -43,36 +43,34 @@ export const Abum = () => {
       </div>
       <div className='col-span-9'>
         <p>Lời tựa và những đại diện K-pop ngầu đét</p>
-        <div className='grid grid-cols-3 w-full px-2 py-2'>
-          <div className=' gap-2 cols-span-4 flex items-center '>
+        <div className='grid grid-cols-5 w-full px-2 py-2'>
+          <div className=' gap-2 col-span-2 flex items-center '>
             <Icons.GiLevelThreeAdvanced />
             <p>BÀI HÁT</p>
           </div>
-          <p className='cols-span-4  flex items-center justify-center'>ABUM</p>
-          <p className='cols-span-4  flex items-center justify-end'> THỜI GIAN</p>
+          <p className='col-span-2  flex items-center justify-center'>ABUM</p>
+          <p className='col2-span-1  flex items-center justify-end'> THỜI GIAN</p>
         </div>
         <div>
           {playList?.song?.items?.map((items: songProp, index: number) => {
             return (
               <div
                 key={index}
-                className='grid grid-cols-3 w-full flex items-center hover:bg-[#423C4B] px-2 hover:rounded-md hover:cursor-pointer border-b border-[#423C4B] '
+                className='grid grid-cols-5 w-full f items-center hover:bg-[#423C4B] px-2 hover:rounded-md hover:cursor-pointer border-b border-[#423C4B] '
               >
-                <div className='gap-2 cols-span-4 gap-2  flex items-center py-3 cursor-pointer'>
+                <div className='gap-2 col-span-2  flex items-center py-3 cursor-pointer'>
                   <Icons.BiMusic />
-                  <img
-                    src={items?.thumbnail
-                    }
-                    alt='ảnh bài hát'
-                    className='w-[40px] h-[40px] object-cover rounded-lg'
-                  />
+                  <img src={items?.thumbnail} alt='ảnh bài hát' className='w-[40px] h-[40px] object-cover rounded-lg' />
                   <div className='flex-col flex items-center'>
-                    <p className='font-semibold text-[15px]'>{items?.title}</p>
+                    <p className='font-semibold text-[14px] line-clamp-1'>{items?.title}</p>
+
                     <span className='text-[12px] font-semibold text-[#7C7782]'>{items?.artistsNames}</span>
                   </div>
                 </div>
-                <p className='cols-span-4 flex items-center justify-center line-clamp-1'>{items?.album?.title}</p>
-                <p className='cols-span-4 flex items-center justify-end'>{covertTime(items?.duration)}</p>
+                <div className='flex items-center justify-center col-span-2 '>
+                  <p className='   line-clamp-1 text-[13px] '>{items?.album?.title}</p>
+                </div>
+                <p className='col-span-1 flex items-center justify-end'>{covertTime(items?.duration)}</p>
               </div>
             )
           })}
