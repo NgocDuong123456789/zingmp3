@@ -10,15 +10,15 @@ export default {
             transform: 'translateX(0px)'
           },
           '100%': {
-            '-webkit-transform': 'translateX(100px)',
-            transform: 'translateX(100px)'
+            '-webkit-transform': 'translateX(0px)',
+            transform: 'translateX(0px)'
           }
         }
       },
       animation: {
-        slide: ' slide-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both'
+        slide: ' slide-right 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both'
       }
     }
   },
-  plugins: []
+  plugins:[  require('@tailwindcss/line-clamp'),]
 }

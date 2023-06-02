@@ -15,6 +15,7 @@
   "dependencies": {
     "@hookform/resolvers": "^3.1.0",
     "@reduxjs/toolkit": "^1.9.5",
+    "@tailwindcss/line-clamp": "^0.4.4",
     "@tippyjs/react": "^4.2.6",
     "axios": "^1.4.0",
     "classnames": "^2.3.2",
@@ -26,6 +27,7 @@
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.11.2",
     "redux": "^4.2.1",
+    "redux-persist": "^6.0.0",
     "yup": "^1.2.0"
   },
   "devDependencies": {

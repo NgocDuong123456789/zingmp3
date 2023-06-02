@@ -5,4 +5,6 @@
   .header {
     @apply flex items-center justify-between py-3 px-4 hover:bg-[hsla(0,0%,100%,0.1)] hover:rounded-lg;
   }
+  
+  
 }

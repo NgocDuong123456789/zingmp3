@@ -1,0 +1,18 @@
+.range {
+    width: 300px;
+    height: 4px;
+    background-color: #ccc;
+    cursor: pointer;
+    -webkit-appearance: none;
+    border-radius: 5px;
+    outline:none
+  }
+  .range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    outline:none;
+    background-color: #4caf50;
+  }
+

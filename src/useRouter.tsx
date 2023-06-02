@@ -3,6 +3,7 @@ import { path } from './contains/path'
 import { LayoutMain } from './Layouts/LayoutMain'
 import { Home, Login, Register } from './defaultPath'
 import { NotFound } from './pages/NotFound/NotFound'
+import { Abum } from './pages/Abum/Abum'
 
 const Routes = () => {
   const router = useRoutes([
@@ -28,6 +29,15 @@ const Routes = () => {
     }
     ,
     {
+      path:path.abum,
+      element: (
+        <LayoutMain>
+          <Abum />
+        </LayoutMain>
+      )
+    }
+    ,
+    {
       path:"*",
       element: (
         <LayoutMain>
@@ -35,6 +45,7 @@ const Routes = () => {
         </LayoutMain>
       )
     }
+
   ])
   return router
 }

@@ -8,7 +8,7 @@ const Sidebar = () => {
   const location = useLocation()
 
   return (
-    <nav className='w-full h-[100vh] bg-[#221A2D] text-[white] relative'>
+    <nav className='w-full h-[100vh] bg-[#221A2D] text-[white] relative '>
       <Link to={path.home}>
         {' '}
         <div className='w-[200px] h-[65px]  m-auto '>

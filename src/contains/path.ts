@@ -6,5 +6,6 @@ export const path = {
   radio: '/radio',
   newzing: '/moi-phat-hanh',
   hub: '/hub',
-  top: '/top100'
+  top: '/top100',
+  abum:"/playlist/:title/:id"
 }
