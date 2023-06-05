@@ -13,10 +13,32 @@ export default {
             '-webkit-transform': 'translateX(0px)',
             transform: 'translateX(0px)'
           }
+        },
+        'rotate-center': {
+          ' 0%': {
+            '-webkit-transform': 'rotate(0)',
+            transform: 'rotate(0)'
+          },
+          '100%': {
+            '-webkit-transform': 'rotate(360deg)',
+            transform: 'rotate(360deg)'
+          }
+        },
+        'rotate-center-pause': {
+          ' 0%': {
+            '-webkit-transform': 'rotate(0)',
+            transform: 'rotate(0)'
+          },
+          '100%': {
+            '-webkit-transform': 'rotate(360deg)',
+            transform: 'rotate(360deg)'
+          }
         }
       },
       animation: {
-        slide: ' slide-right 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both'
+        slide: ' slide-right 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both',
+        rotateCenter:'rotate-center 4s linear infinite',
+        'rotate-center-pause':'rotate-center-pause 0.5s linear  3 both'
       }
     }
   },

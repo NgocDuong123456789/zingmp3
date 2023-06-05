@@ -5,14 +5,6 @@ import { detailplaylist, fetchHome, playAlbum, playMusic } from '../../redux/Sli
 import { musicId } from '~/redux/SliceMusic'
 import { useNavigate } from 'react-router-dom'
 import { link } from 'fs'
-interface BannerProp {
-  type: number
-  sectionType: string
-  banner: string
-  cover: string
-  encodeId: string
-  ispr: number
-}
 
 interface banner {
   banner: string
@@ -29,10 +21,8 @@ export const Banner = () => {
   const dis = useDispatch()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  // const musicid = useSelector((state: RootState) => state.id)
-  // const id = musicid.id as string
   const homeList = useSelector((state: RootState) => state?.home)
- 
+
   useEffect(() => {
     dispatch(fetchHome())
   }, [])
@@ -91,7 +81,7 @@ export const Banner = () => {
       <div>
         <div className='absolute top-[50%] translate-y-[-50%] left-[10px] w-[50px] h-[50px] bg-[#393142] rounded-full flex items-center justify-center cursor-pointer'>
           <svg
-            // onClick={handlePrev}
+           
             xmlns='http://www.w3.org/2000/svg'
             fill='none'
             viewBox='0 0 24 24'
@@ -104,7 +94,7 @@ export const Banner = () => {
         </div>
         <div className='absolute top-[50%] translate-y-[-50%] right-[10px] w-[50px] h-[50px] bg-[#393142] rounded-full flex items-center justify-center cursor-pointer'>
           <svg
-            // onClick={handleNext}
+          
             xmlns='http://www.w3.org/2000/svg'
             fill='none'
             viewBox='0 0 24 24'

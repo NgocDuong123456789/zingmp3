@@ -1,22 +1,23 @@
 import { Icons } from '../../helper/icons'
 import { useState, useEffect, useRef } from 'react'
-import './Player.css'
-import { fetchInfoSong, fetchSong } from '../../redux/SliceHome'
+
+import { fetchInfoSong, fetchSong, playMusic } from '../../redux/SliceHome'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState, useAppDispatch } from '~/redux/store'
-import { playMusic } from '../../redux/SliceHome'
+
 import { covertTime } from '~/helper/utils'
 import swal from 'sweetalert2'
 import classNames from 'classnames'
 import { songProp } from '../../types/song.types'
 import { musicId } from '~/redux/SliceMusic'
-import { reach } from 'yup'
-
-let intervalId: string | number | NodeJS.Timer | null | undefined
+ 
 export const Player = () => {
+  
   const [audio, setAudio] = useState<HTMLAudioElement>(new Audio())
   const thumb = useRef<HTMLDivElement>(null)
+  // const [volume, setVolume] = useState<boolean>(false)
   const [repeat, setRepeat] = useState<boolean>(false)
+  const [VolumeMedium, setVolumeMedium] = useState<number>(30)
   const music = useSelector((state: RootState) => state.music)
   const home = useSelector((state: RootState) => state.home)
 
@@ -29,7 +30,7 @@ export const Player = () => {
   const dis = useDispatch()
   const [dataSong, setDataSong] = useState<songProp | null>(null)
   const [shift, setShift] = useState<boolean>(false)
-  console.log(repeat)
+
   // useEffect(() => {
   //   if (play) {
   //     intervalId = setInterval(() => {
@@ -135,7 +136,18 @@ export const Player = () => {
     dispatch(musicId(home.detailplaylist?.data?.song.items[randomIndexSong - 1]?.encodeId))
     dis(playMusic(true))
   }
-  console.log(shift)
+   let volumes:number
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setVolumeMedium(Number(e.target.value))
+    
+ 
+  }
+  audio.volume=0.3
+  useEffect(() => {
+    audio.volume = VolumeMedium / 100
+   
+  }, [VolumeMedium])
+
   return (
     <div className='flex items-center justify-between bg-[rgb(19,12,28)] w-full h-[90px] text-[white] px-[1.75rem] '>
       <div className='flex items-center gap-4 '>
@@ -226,10 +238,15 @@ export const Player = () => {
             />
           </svg>
 
-          <Icons.BsArrowRepeat size={23} title='Bật phát lại 1 bài' onClick={() => setRepeat((prev) => !prev)} className={classNames('w-6 h-6', {
+          <Icons.BsArrowRepeat
+            size={23}
+            title='Bật phát lại 1 bài'
+            onClick={() => setRepeat((prev) => !prev)}
+            className={classNames('w-6 h-6', {
               'fill-[#C273ED]': repeat,
-              'fill-[white]': !repeat,
-            })} />
+              'fill-[white]': !repeat
+            })}
+          />
         </div>
         <div className='flex items-center gap-3'>
           <span className='text-[rgb(136,132,140)] text-[14px] font-bold'>01:22</span>
@@ -263,8 +280,21 @@ export const Player = () => {
         </svg>
 
         <div className='flex items-center gap-2'>
-          <Icons.ImVolumeMedium size={25} />
-          <input type='range' />
+          {VolumeMedium <= 0 ? (
+            <Icons.BsFillVolumeMuteFill size={25} onClick={() => setVolumeMedium(40)} />
+          ) : (
+            <Icons.ImVolumeMedium size={25} onClick={() => setVolumeMedium(0)} />
+          )}
+
+          <input
+            type='range'
+            step='0.1'
+            min={0}
+            max={100}
+            value={VolumeMedium}
+            onChange={handleVolumeChange}
+            className='w-full cursor-pointer'
+          />
         </div>
       </div>
     </div>

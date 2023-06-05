@@ -1,21 +1,23 @@
 /* eslint-disable import/no-unresolved */
 import { useSelector, useDispatch } from 'react-redux'
 import { useEffect } from 'react'
-
+import AudioLoading from '../../components/AudioLoading/AudioLoading'
 import { Icons } from '~/helper/icons'
 import { RootState } from '~/redux/store'
 import { Scrollbars } from 'react-custom-scrollbars-2'
-import { playList } from '../../types/playList.types'
+
 import { convertLike, convertNumberToTime, convertToDate, covertTime } from '~/helper/utils'
 import { songProp } from '~/types/song.types'
-import { musicId} from '~/redux/SliceMusic'
+import { musicId } from '~/redux/SliceMusic'
 import { playAlbum, playMusic } from '~/redux/SliceHome'
+import { spawn } from 'child_process'
 
 export const Abum = () => {
   const dispatch = useDispatch()
-  const homeList = useSelector((state: RootState) => state?.home.detailplaylist)
-  const playList = homeList?.data
- 
+  const homeList = useSelector((state: RootState) => state?.home)
+  const playList = homeList?.detailplaylist?.data
+  const play = homeList?.play
+
   return (
     <Scrollbars
       style={{ width: '100%', height: 600, marginTop: 74 }}
@@ -23,11 +25,25 @@ export const Abum = () => {
     >
       <div className='grid grid-cols-12 px-[1.75rem] bg-[#170F23] text-[white] gap-[20px] py-[60px] w-full'>
         <div className=' col-span-3 flex flex-col w-full items-center  '>
-          <img
-            src={playList?.thumbnail}
-            alt='ảnh đại diện abum nhạc'
-            className='w-full object-cover rounded-lg cursor-pointer'
-          />
+          <div className='w-full relative overflow-hidden'>
+            <img
+              src={playList?.thumbnail}
+              alt='ảnh đại diện abum nhạc'
+              className={`w-full object-cover cursor-pointer  ${
+                play ? 'rounded-full animate-rotateCenter' : 'rounded-md '
+              }`}
+            />
+            <div className='top-0 right-0 absolute left-0 bottom-0 hover:bg-[rgba(0,0,0,0.3)] hover:rounded-md items-center justify-center flex cursor-pointer'>
+            
+                <span className='p-2 rounded-full border items-center flex justify-center'>
+                  {/* {
+                    play? <AudioLoading  onClick={()=>{}}/> :  <Icons.BsFillPlayFill size={40} />
+                  } */}
+                
+                </span>
+             
+            </div>
+          </div>
 
           <h2 className='font-bold text-[20px] my-3 line-clamp-1'>{playList?.aliasTitle}</h2>
           <p>{`cập nhật : ${convertToDate(playList?.contentLastUpdate)}`}</p>
@@ -72,13 +88,11 @@ export const Abum = () => {
                     <Icons.BiMusic />
                     <img
                       aria-hidden='true'
-                      onClick={() => 
-                       {
+                      onClick={() => {
                         dispatch(musicId(items?.encodeId))
-                         dispatch(playMusic(true))
-                         dispatch(playAlbum(true))
-                       }
-                      }
+                        dispatch(playMusic(true))
+                        dispatch(playAlbum(true))
+                      }}
                       src={items?.thumbnail}
                       alt='ảnh bài hát'
                       className='w-[40px] h-[40px] object-cover rounded-lg'

@@ -1,4 +1,4 @@
-import { BsSearch ,BsThreeDots,BsArrowRepeat} from 'react-icons/bs'
+import { BsSearch ,BsThreeDots,BsArrowRepeat,BsFillPlayFill,BsFillVolumeMuteFill} from 'react-icons/bs'
 import { CgPlayPause } from 'react-icons/cg'
 import { MdPlayArrow } from 'react-icons/md'
 import {AiOutlineHeart} from 'react-icons/ai'
@@ -16,5 +16,7 @@ export const Icons = {
   GiLevelThreeAdvanced,
   BiMusic,
   FaRandom,
-  BsArrowRepeat
+  BsArrowRepeat,
+  BsFillPlayFill,
+  BsFillVolumeMuteFill
 }
