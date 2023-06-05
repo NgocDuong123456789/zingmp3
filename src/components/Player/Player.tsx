@@ -10,25 +10,26 @@ import swal from 'sweetalert2'
 import classNames from 'classnames'
 import { songProp } from '../../types/song.types'
 import { musicId } from '~/redux/SliceMusic'
+import { reach } from 'yup'
 
 let intervalId: string | number | NodeJS.Timer | null | undefined
 export const Player = () => {
   const [audio, setAudio] = useState<HTMLAudioElement>(new Audio())
   const thumb = useRef<HTMLDivElement>(null)
-
+  const [repeat, setRepeat] = useState<boolean>(false)
   const music = useSelector((state: RootState) => state.music)
   const home = useSelector((state: RootState) => state.home)
-  const [, setIndexSong] = useState<number>(0)
 
   const id = music.id as string
 
-  const play = home.play as boolean
-  const playAlbum = home.alBum as boolean
+  const play = home.play
+  const playAlbum = home.alBum
   const trackRef = useRef<HTMLDivElement>(null)
   const dispatch = useAppDispatch()
   const dis = useDispatch()
   const [dataSong, setDataSong] = useState<songProp | null>(null)
   const [shift, setShift] = useState<boolean>(false)
+  console.log(repeat)
   // useEffect(() => {
   //   if (play) {
   //     intervalId = setInterval(() => {
@@ -59,11 +60,11 @@ export const Player = () => {
     dispatch(fetchSong({ id }))
       .unwrap()
       .then((res) => {
-        if (res.err === 0) {
+        if (res?.err === 0) {
           audio.pause()
           setAudio(new Audio(res?.data?.['128']))
         } else {
-          swal.fire(res.msg)
+          swal.fire(res?.msg)
           setAudio(new Audio())
           dis(playMusic(false))
         }
@@ -85,7 +86,23 @@ export const Player = () => {
       audio?.play()
     }
   }
-  const handleprogressbar = (e: any) => {
+
+  useEffect(() => {
+    const handleEnd = () => {
+      if (shift) {
+        handleRandomSong()
+      } else if (repeat) {
+        handleNextSong()
+      } else {
+        dis(playMusic(false))
+        audio.pause()
+      }
+    }
+
+    audio.addEventListener('ended', handleEnd)
+    return () => audio.removeEventListener('ended', handleEnd)
+  }, [audio, shift, repeat])
+  const handleprogressbar = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (trackRef.current) {
       const percent = Math.round(
         ((e.clientX - trackRef.current.getBoundingClientRect().left) / trackRef.current.getBoundingClientRect().width) *
@@ -95,32 +112,30 @@ export const Player = () => {
       if (thumb.current) {
         thumb.current.style.cssText = `right:${100 - percent}%`
         audio.currentTime = (audio.duration * percent) / 100
-        // setAudio(new Audio())
       }
     }
   }
 
   const handleNextSong = () => {
-    //let current =0
     if (playAlbum) {
-      const findIdSong = (home.playList as any)?.data?.song.items.findIndex((item: songProp) => item.encodeId === id)
-      dispatch(musicId((home.playList as any)?.data?.song.items[findIdSong + 1].encodeId))
+      const findIdSong = home.detailplaylist?.data?.song.items.findIndex((item: songProp) => item.encodeId === id)
+      dispatch(musicId(home.detailplaylist?.data?.song.items[findIdSong + 1].encodeId))
       dis(playMusic(true))
     }
   }
   const handlePrevSong = () => {
     if (playAlbum) {
-      const findIdSong = (home.playList as any)?.data?.song.items.findIndex((item: songProp) => item.encodeId === id)
-      dispatch(musicId((home.playList as any)?.data?.song.items[findIdSong - 1].encodeId))
+      const findIdSong = home.detailplaylist?.data?.song.items.findIndex((item: songProp) => item.encodeId === id)
+      dispatch(musicId(home.detailplaylist?.data?.song.items[findIdSong - 1].encodeId))
       dis(playMusic(true))
     }
   }
   const handleRandomSong = () => {
-    setShift((prev) => !prev)
-    const randomIndexSong = Math.floor(Math.random() * (home.playList as any)?.data?.song.items.length)
-
-    
+    const randomIndexSong = Math.floor(Math.random() * home.detailplaylist?.data?.song.items.length) - 1
+    dispatch(musicId(home.detailplaylist?.data?.song.items[randomIndexSong - 1]?.encodeId))
+    dis(playMusic(true))
   }
+  console.log(shift)
   return (
     <div className='flex items-center justify-between bg-[rgb(19,12,28)] w-full h-[90px] text-[white] px-[1.75rem] '>
       <div className='flex items-center gap-4 '>
@@ -163,7 +178,7 @@ export const Player = () => {
           <Icons.FaRandom
             size={0}
             title='phát nhạc ngẫu nhiên'
-            onClick={handleRandomSong}
+            onClick={() => setShift((prev) => !prev)}
             className={classNames('w-6 h-6', {
               'fill-[#C273ED]': shift,
               'fill-[white]': !shift
@@ -211,7 +226,10 @@ export const Player = () => {
             />
           </svg>
 
-          <Icons.BsArrowRepeat size={23} title='Bật phát lại 1 bài' />
+          <Icons.BsArrowRepeat size={23} title='Bật phát lại 1 bài' onClick={() => setRepeat((prev) => !prev)} className={classNames('w-6 h-6', {
+              'fill-[#C273ED]': repeat,
+              'fill-[white]': !repeat,
+            })} />
         </div>
         <div className='flex items-center gap-3'>
           <span className='text-[rgb(136,132,140)] text-[14px] font-bold'>01:22</span>

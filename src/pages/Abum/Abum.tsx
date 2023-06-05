@@ -13,9 +13,8 @@ import { playAlbum, playMusic } from '~/redux/SliceHome'
 
 export const Abum = () => {
   const dispatch = useDispatch()
-  const homeList = useSelector((state: RootState) => state?.home.playList)
-
-  const playList = (homeList as any)?.data as playList
+  const homeList = useSelector((state: RootState) => state?.home.detailplaylist)
+  const playList = homeList?.data
  
   return (
     <Scrollbars

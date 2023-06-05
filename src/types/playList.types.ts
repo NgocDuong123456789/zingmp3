@@ -1,13 +1,13 @@
 import { songProp } from './song.types'
 
 export interface playList {
-  err: number
-  description: string
-  thumbnail: string
-  aliasTitle:string
-  thumbnailM: string
+ 
+  description?: string
+  thumbnail?: string
+  aliasTitle?:string
+  thumbnailM?: string
   contentLastUpdate: number
-  genreIds:string[]
+  genreIds?:string[]
   like: number
   song: {
     items:songProp[],

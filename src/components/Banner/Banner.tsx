@@ -32,11 +32,7 @@ export const Banner = () => {
   // const musicid = useSelector((state: RootState) => state.id)
   // const id = musicid.id as string
   const homeList = useSelector((state: RootState) => state?.home)
-  console.log(homeList)
-  const banner = (homeList as any)?.listHome?.data?.items?.filter(
-    (item: BannerProp) => item?.sectionType === 'banner'
-  )[0].items
-
+ 
   useEffect(() => {
     dispatch(fetchHome())
   }, [])
@@ -70,21 +66,19 @@ export const Banner = () => {
       dis(musicId(item.encodeId))
       dis(playMusic(true))
       dis(playAlbum(false))
-
-    }
-    else if (item.type === 4) {
+    } else if (item.type === 4) {
       const id = item.encodeId
       dispatch(detailplaylist({ id })).then((res) => {
         const linkPath = res?.payload?.data?.link?.split('.')[0]
         navigate(linkPath)
       })
-    }else{
+    } else {
       dis(playAlbum(false))
     }
   }
   return (
     <div className='w-full gap-4 flex items-center overflow-hidden rounded-lg relative mt-[80px]'>
-      {banner?.map((item: banner, index: number) => (
+      {homeList?.banner?.map((item: banner, index: number) => (
         <img
           src={item?.banner}
           alt='ảnh banner'

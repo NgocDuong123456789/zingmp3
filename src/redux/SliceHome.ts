@@ -1,6 +1,96 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import https from '../apis/https'
+import { songProp } from '~/types/song.types'
 import { playList } from '~/types/playList.types'
+interface song {
+  err: number
+  msg?: string
+  timestamp?: string
+  data: {
+    128: string
+    320: string
+  }
+}
+interface detailplaylist {
+  err: number
+  data: playList
+}
+
+interface bannerProps {
+  type: number
+  link: string
+  banner: string
+  cover: string
+  target: string
+  title: string
+  description: string
+  ispr: number
+  encodeId: string
+}
+interface initialState {
+  banner: bannerProps[]
+  song: song
+  play: boolean
+  alBum: boolean
+  detailplaylist: detailplaylist
+  friday: art[]
+}
+interface art {
+  artists: [
+    {
+      alias: string
+      id: string
+      isOA: boolean
+      isOABrand: boolean
+      link: string
+      name: string
+      playlistId: string
+      spotlight: false
+      thumbnail: string
+      thumbnailM: string
+      totalFollow: number
+    }
+  ]
+  artistsNames: string
+  encodeId: string
+  link: string
+  sortDescription: string
+  thumbnail: string
+  thumbnailM: string
+  title: string
+}
+const initialState: initialState = {
+  banner: [],
+  friday: [],
+  detailplaylist: {
+    err: 0,
+    data: {
+      like: 0,
+      contentLastUpdate: 0,
+      thumbnail: '',
+      genreIds: [],
+      description: '',
+      aliasTitle: '',
+      song: {
+        items: [],
+        total: 0,
+        totalDuration: 0
+      }
+    }
+  },
+
+  song: {
+    err: 0,
+    data: {
+      128: '',
+      320: ''
+    }
+  },
+  play: false,
+  alBum: false
+}
+
+
 export const fetchHome = createAsyncThunk('home', async (_, thunkAPI) => {
   try {
     const response = await https.get('/api/home', {
@@ -38,7 +128,7 @@ export const detailplaylist = createAsyncThunk('detailplaylist', async (id: { id
 
 export const fetchSong = createAsyncThunk('song', async (id: { id: string }, thunkAPI) => {
   try {
-    const response = await https.get('/api/song', {
+    const response = await https.get<song>('/api/song', {
       params: id,
       signal: thunkAPI.signal
     })
@@ -49,18 +139,6 @@ export const fetchSong = createAsyncThunk('song', async (id: { id: string }, thu
   }
 })
 
-const initialState = {
-  listHome: [],
-  playList: [],
-  song: [],
-  play:false,
-  alBum:false
-}
-
-// const initialState: musicIdProp = {
- 
-//   play: false
-// }
 export const homeSlice = createSlice({
   name: 'home',
   initialState,
@@ -68,23 +146,31 @@ export const homeSlice = createSlice({
     playMusic: (state, action: PayloadAction<boolean>) => {
       state.play = action.payload
     },
-    playAlbum:(fetchSong.fulfilled, (state, action:PayloadAction<boolean>) => {
-      state.alBum = action.payload
-    })
+    playAlbum:
+      (fetchSong.fulfilled,
+      (state, action: PayloadAction<boolean>) => {
+        state.alBum = action.payload
+      })
   },
+
   extraReducers: (builder) => {
     builder
       .addCase(fetchHome.fulfilled, (state, action) => {
-        state.listHome = action.payload
+        if (action.payload !== undefined) {
+          state.banner = action?.payload?.data?.items?.find((item: any) => item?.sectionId === 'hSlider')?.items
+          state.friday = action?.payload?.data?.items?.find((item: any) => item?.sectionId === 'hArtistTheme')?.items
+        }
       })
+
       .addCase(detailplaylist.fulfilled, (state, action) => {
-        state.playList = action.payload
+        state.detailplaylist = action.payload
       })
       .addCase(fetchSong.fulfilled, (state, action) => {
-        state.song = action.payload
+        if (action.payload !== undefined) {
+          state.song = action.payload
+        }
       })
-      
   }
 })
-export const {  playMusic,  playAlbum} = homeSlice.actions
+export const { playMusic, playAlbum } = homeSlice.actions
 export default homeSlice.reducer

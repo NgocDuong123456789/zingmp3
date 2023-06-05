@@ -8,12 +8,11 @@ export interface songProp {
   duration: number
   encodeId: string
   hasLyric: boolean
-  
-  indicators: [],
-   album:{
-    title:string
-   }
-  
+  indicators: []
+  album: {
+    title: string
+  }
+
   isIndie: boolean
   isOffical: boolean
   isPrivate: boolean
