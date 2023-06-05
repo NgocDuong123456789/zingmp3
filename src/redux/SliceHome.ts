@@ -53,7 +53,8 @@ const initialState = {
   listHome: [],
   playList: [],
   song: [],
-  play:false
+  play:false,
+  alBum:false
 }
 
 // const initialState: musicIdProp = {
@@ -66,7 +67,10 @@ export const homeSlice = createSlice({
   reducers: {
     playMusic: (state, action: PayloadAction<boolean>) => {
       state.play = action.payload
-    }
+    },
+    playAlbum:(fetchSong.fulfilled, (state, action:PayloadAction<boolean>) => {
+      state.alBum = action.payload
+    })
   },
   extraReducers: (builder) => {
     builder
@@ -79,7 +83,8 @@ export const homeSlice = createSlice({
       .addCase(fetchSong.fulfilled, (state, action) => {
         state.song = action.payload
       })
+      
   }
 })
-export const {  playMusic} = homeSlice.actions
+export const {  playMusic,  playAlbum} = homeSlice.actions
 export default homeSlice.reducer

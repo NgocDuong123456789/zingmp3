@@ -7,27 +7,28 @@ import { RootState, useAppDispatch } from '~/redux/store'
 import { playMusic } from '../../redux/SliceHome'
 import { covertTime } from '~/helper/utils'
 import swal from 'sweetalert2'
-interface songProp {
-  artistsNames: string
-  title: string
-  thumbnail: string
-  duration: number
-}
+import classNames from 'classnames'
+import { songProp } from '../../types/song.types'
+import { musicId } from '~/redux/SliceMusic'
+
 let intervalId: string | number | NodeJS.Timer | null | undefined
 export const Player = () => {
   const [audio, setAudio] = useState<HTMLAudioElement>(new Audio())
   const thumb = useRef<HTMLDivElement>(null)
-  // const [currentSecond, setCurrentSecond] = useState<number>(0)
-  // console.log(currentSecond)
+
   const music = useSelector((state: RootState) => state.music)
   const home = useSelector((state: RootState) => state.home)
+  const [, setIndexSong] = useState<number>(0)
+
   const id = music.id as string
+
   const play = home.play as boolean
+  const playAlbum = home.alBum as boolean
   const trackRef = useRef<HTMLDivElement>(null)
   const dispatch = useAppDispatch()
   const dis = useDispatch()
   const [dataSong, setDataSong] = useState<songProp | null>(null)
-
+  const [shift, setShift] = useState<boolean>(false)
   // useEffect(() => {
   //   if (play) {
   //     intervalId = setInterval(() => {
@@ -94,9 +95,31 @@ export const Player = () => {
       if (thumb.current) {
         thumb.current.style.cssText = `right:${100 - percent}%`
         audio.currentTime = (audio.duration * percent) / 100
-        
+        // setAudio(new Audio())
       }
     }
+  }
+
+  const handleNextSong = () => {
+    //let current =0
+    if (playAlbum) {
+      const findIdSong = (home.playList as any)?.data?.song.items.findIndex((item: songProp) => item.encodeId === id)
+      dispatch(musicId((home.playList as any)?.data?.song.items[findIdSong + 1].encodeId))
+      dis(playMusic(true))
+    }
+  }
+  const handlePrevSong = () => {
+    if (playAlbum) {
+      const findIdSong = (home.playList as any)?.data?.song.items.findIndex((item: songProp) => item.encodeId === id)
+      dispatch(musicId((home.playList as any)?.data?.song.items[findIdSong - 1].encodeId))
+      dis(playMusic(true))
+    }
+  }
+  const handleRandomSong = () => {
+    setShift((prev) => !prev)
+    const randomIndexSong = Math.floor(Math.random() * (home.playList as any)?.data?.song.items.length)
+
+    
   }
   return (
     <div className='flex items-center justify-between bg-[rgb(19,12,28)] w-full h-[90px] text-[white] px-[1.75rem] '>
@@ -137,24 +160,23 @@ export const Player = () => {
       </div>
       <div className='flex flex-col  items-center'>
         <div className='flex items-center gap-10 cursor-pointer '>
+          <Icons.FaRandom
+            size={0}
+            title='phát nhạc ngẫu nhiên'
+            onClick={handleRandomSong}
+            className={classNames('w-6 h-6', {
+              'fill-[#C273ED]': shift,
+              'fill-[white]': !shift
+            })}
+          />
           <svg
             xmlns='http://www.w3.org/2000/svg'
             fill='none'
             viewBox='0 0 24 24'
             strokeWidth={1.5}
             stroke='currentColor'
-            className='w-6 h-6'
-          >
-            <path strokeLinecap='round' strokeLinejoin='round' d='M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3' />
-          </svg>
-
-          <svg
-            xmlns='http://www.w3.org/2000/svg'
-            fill='none'
-            viewBox='0 0 24 24'
-            strokeWidth={1.5}
-            stroke='currentColor'
-            className='w-6 h-6'
+            className='w-6 h-6 fill-[white]'
+            onClick={handlePrevSong}
           >
             <path
               strokeLinecap='round'
@@ -176,7 +198,11 @@ export const Player = () => {
             viewBox='0 0 24 24'
             strokeWidth={1.5}
             stroke='currentColor'
-            className='w-6 h-6'
+            className={classNames('w-6 h-6', {
+              'fill-[rgb(124,121,129)] cursor-not-allowed': !playAlbum,
+              'fill-[white] cursor-pointer': playAlbum
+            })}
+            onClick={handleNextSong}
           >
             <path
               strokeLinecap='round'
@@ -185,16 +211,7 @@ export const Player = () => {
             />
           </svg>
 
-          <svg
-            xmlns='http://www.w3.org/2000/svg'
-            fill='none'
-            viewBox='0 0 24 24'
-            strokeWidth={1.5}
-            stroke='currentColor'
-            className='w-6 h-6'
-          >
-            <path strokeLinecap='round' strokeLinejoin='round' d='M15 15l6-6m0 0l-6-6m6 6H9a6 6 0 000 12h3' />
-          </svg>
+          <Icons.BsArrowRepeat size={23} title='Bật phát lại 1 bài' />
         </div>
         <div className='flex items-center gap-3'>
           <span className='text-[rgb(136,132,140)] text-[14px] font-bold'>01:22</span>

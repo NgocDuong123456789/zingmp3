@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useAppDispatch, RootState } from '~/redux/store'
-import { detailplaylist, fetchHome, playMusic } from '../../redux/SliceHome'
+import { detailplaylist, fetchHome, playAlbum, playMusic } from '../../redux/SliceHome'
 import { musicId } from '~/redux/SliceMusic'
 import { useNavigate } from 'react-router-dom'
 import { link } from 'fs'
@@ -32,7 +32,7 @@ export const Banner = () => {
   // const musicid = useSelector((state: RootState) => state.id)
   // const id = musicid.id as string
   const homeList = useSelector((state: RootState) => state?.home)
-
+  console.log(homeList)
   const banner = (homeList as any)?.listHome?.data?.items?.filter(
     (item: BannerProp) => item?.sectionType === 'banner'
   )[0].items
@@ -69,6 +69,7 @@ export const Banner = () => {
     if (item.type === 1) {
       dis(musicId(item.encodeId))
       dis(playMusic(true))
+      dis(playAlbum(false))
 
     }
     else if (item.type === 4) {
@@ -77,6 +78,8 @@ export const Banner = () => {
         const linkPath = res?.payload?.data?.link?.split('.')[0]
         navigate(linkPath)
       })
+    }else{
+      dis(playAlbum(false))
     }
   }
   return (

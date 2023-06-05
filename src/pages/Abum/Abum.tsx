@@ -9,7 +9,7 @@ import { playList } from '../../types/playList.types'
 import { convertLike, convertNumberToTime, convertToDate, covertTime } from '~/helper/utils'
 import { songProp } from '~/types/song.types'
 import { musicId} from '~/redux/SliceMusic'
-import { playMusic } from '~/redux/SliceHome'
+import { playAlbum, playMusic } from '~/redux/SliceHome'
 
 export const Abum = () => {
   const dispatch = useDispatch()
@@ -77,6 +77,7 @@ export const Abum = () => {
                        {
                         dispatch(musicId(items?.encodeId))
                          dispatch(playMusic(true))
+                         dispatch(playAlbum(true))
                        }
                       }
                       src={items?.thumbnail}
