@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useAppDispatch, RootState } from '~/redux/store'
-import { detailplaylist, fetchHome } from '../../redux/SliceHome'
+import { detailplaylist, fetchHome, playMusic } from '../../redux/SliceHome'
 import { musicId } from '~/redux/SliceMusic'
 import { useNavigate } from 'react-router-dom'
 import { link } from 'fs'
@@ -29,11 +29,13 @@ export const Banner = () => {
   const dis = useDispatch()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const musicid = useSelector((state: RootState) => state.id)
-  const id = musicid.id as string
-  const homeList = useSelector((state: RootState) => (state?.home))
+  // const musicid = useSelector((state: RootState) => state.id)
+  // const id = musicid.id as string
+  const homeList = useSelector((state: RootState) => state?.home)
 
-  const banner = (homeList as any)?.listHome?.data?.items?.filter((item: BannerProp) => item?.sectionType === 'banner')[0].items
+  const banner = (homeList as any)?.listHome?.data?.items?.filter(
+    (item: BannerProp) => item?.sectionType === 'banner'
+  )[0].items
 
   useEffect(() => {
     dispatch(fetchHome())
@@ -63,20 +65,22 @@ export const Banner = () => {
   }, [])
 
   const handleClickBanner = (item: banner) => {
+    console.log(item)
     if (item.type === 1) {
       dis(musicId(item.encodeId))
-    }
+      dis(playMusic(true))
 
-    if (item.type === 4) {
+    }
+    else if (item.type === 4) {
+      const id = item.encodeId
       dispatch(detailplaylist({ id })).then((res) => {
-        
         const linkPath = res?.payload?.data?.link?.split('.')[0]
         navigate(linkPath)
       })
     }
   }
   return (
-    <div className='w-full gap-4 flex items-center overflow-hidden rounded-lg relative'>
+    <div className='w-full gap-4 flex items-center overflow-hidden rounded-lg relative mt-[80px]'>
       {banner?.map((item: banner, index: number) => (
         <img
           src={item?.banner}

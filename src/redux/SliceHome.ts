@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import https from '../apis/https'
 import { playList } from '~/types/playList.types'
 export const fetchHome = createAsyncThunk('home', async (_, thunkAPI) => {
@@ -12,7 +12,7 @@ export const fetchHome = createAsyncThunk('home', async (_, thunkAPI) => {
   }
 })
 
-export const fetchSong = createAsyncThunk('songInfo', async (id: { id: string }, thunkAPI) => {
+export const fetchInfoSong = createAsyncThunk('songInfo', async (id: { id: string }, thunkAPI) => {
   try {
     const response = await https.get('/api/infosong', {
       params: id,
@@ -36,23 +36,50 @@ export const detailplaylist = createAsyncThunk('detailplaylist', async (id: { id
   }
 })
 
-const initialState = {
-  listHome: [], 
-  playList:[]
-}
-export const homeSlice = createSlice({
-  name: 'home',
-  initialState,
-  reducers: {},
-  extraReducers: (builder) => {
-    builder
-    .addCase(fetchHome.fulfilled, (state, action) => {
-      state.listHome = action.payload
+export const fetchSong = createAsyncThunk('song', async (id: { id: string }, thunkAPI) => {
+  try {
+    const response = await https.get('/api/song', {
+      params: id,
+      signal: thunkAPI.signal
     })
-    .addCase( detailplaylist.fulfilled, (state, action) => {
-      state.playList= action.payload
-    })
+
+    return response?.data
+  } catch (error: any) {
+    if (error?.name === 'AxiosError') return thunkAPI.rejectWithValue(error.response?.data)
   }
 })
 
+const initialState = {
+  listHome: [],
+  playList: [],
+  song: [],
+  play:false
+}
+
+// const initialState: musicIdProp = {
+ 
+//   play: false
+// }
+export const homeSlice = createSlice({
+  name: 'home',
+  initialState,
+  reducers: {
+    playMusic: (state, action: PayloadAction<boolean>) => {
+      state.play = action.payload
+    }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchHome.fulfilled, (state, action) => {
+        state.listHome = action.payload
+      })
+      .addCase(detailplaylist.fulfilled, (state, action) => {
+        state.playList = action.payload
+      })
+      .addCase(fetchSong.fulfilled, (state, action) => {
+        state.song = action.payload
+      })
+  }
+})
+export const {  playMusic} = homeSlice.actions
 export default homeSlice.reducer

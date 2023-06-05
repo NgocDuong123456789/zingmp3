@@ -29,7 +29,7 @@ const Routes = () => {
     }
     ,
     {
-      path:path.abum,
+      path:path.abum || path.playList,
       element: (
         <LayoutMain>
           <Abum />

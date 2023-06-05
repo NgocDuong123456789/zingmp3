@@ -11,6 +11,7 @@ export interface playList {
   like: number
   song: {
     items:songProp[],
-    total:number
+    total:number,
+    totalDuration:number
   }
 }

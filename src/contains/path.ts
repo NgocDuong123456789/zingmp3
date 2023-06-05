@@ -7,5 +7,6 @@ export const path = {
   newzing: '/moi-phat-hanh',
   hub: '/hub',
   top: '/top100',
-  abum:"/playlist/:title/:id"
+  abum:"/album/:title/:id",
+  playList:"/playlist/:title/:id"
 }

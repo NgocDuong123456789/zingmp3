@@ -1,45 +1,103 @@
 import { Icons } from '../../helper/icons'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './Player.css'
-import { fetchSong } from '../../redux/SliceHome'
-import { useSelector } from 'react-redux'
+import { fetchInfoSong, fetchSong } from '../../redux/SliceHome'
+import { useSelector, useDispatch } from 'react-redux'
 import { RootState, useAppDispatch } from '~/redux/store'
+import { playMusic } from '../../redux/SliceHome'
+import { covertTime } from '~/helper/utils'
+import swal from 'sweetalert2'
 interface songProp {
   artistsNames: string
   title: string
   thumbnail: string
+  duration: number
 }
+let intervalId: string | number | NodeJS.Timer | null | undefined
 export const Player = () => {
-  const audio = new Audio(
-   
-  )
-  console.log(audio)
-  const musicId = useSelector((state: RootState) => state.id)
-  const id = musicId.id as string
+  const [audio, setAudio] = useState<HTMLAudioElement>(new Audio())
+  const thumb = useRef<HTMLDivElement>(null)
+  // const [currentSecond, setCurrentSecond] = useState<number>(0)
+  // console.log(currentSecond)
+  const music = useSelector((state: RootState) => state.music)
+  const home = useSelector((state: RootState) => state.home)
+  const id = music.id as string
+  const play = home.play as boolean
+  const trackRef = useRef<HTMLDivElement>(null)
   const dispatch = useAppDispatch()
-  const [play, setPlay] = useState<boolean>(false)
+  const dis = useDispatch()
   const [dataSong, setDataSong] = useState<songProp | null>(null)
 
-  const toggle = () => {
-    setPlay((prev) => !prev)
-  }
   // useEffect(() => {
-  //   audio.play()
-  // }, [id])
-  // console.log(play)
-  // useEffect(() => {
-  //   setClassName(`h-[4px] w-${range}% absolute top-[14.2px] left-0 bottom-0 right-0 bg-[red] rounded-sm z-0`)
-  // }, [range])
+  //   if (play) {
+  //     intervalId = setInterval(() => {
+  //       // eslint-disable-next-line prefer-const
+  //       let percent = Math.round((audio?.currentTime * 10000) / (dataSong?.duration as number)) / 100
+  //       // console.log(Math.round(audio?.currentTime))
+  //       // setCurrentSecond(Math.round(audio?.currentTime))
+  //       // console.log(audio?.current.currentTime)
+  //       // console.log(dataSong?.duration)
+  //       if (thumb?.current !== null) {
+  //         thumb.current.style.cssText = `right: ${100 - percent}%`
+  //       }
+  //     }, 1000)
+  //   } else {
+  //     return () => clearInterval(intervalId as number | string)
+  //   }
+  // }, [play])
+
   useEffect(() => {
-    dispatch(fetchSong({ id }))
+    dispatch(fetchInfoSong({ id }))
       .unwrap()
       .then((res) => {
         if (res.err === 0) {
           setDataSong(res?.data)
+          // setCurrentSecond(0)
+        }
+      })
+    dispatch(fetchSong({ id }))
+      .unwrap()
+      .then((res) => {
+        if (res.err === 0) {
+          audio.pause()
+          setAudio(new Audio(res?.data?.['128']))
+        } else {
+          swal.fire(res.msg)
+          setAudio(new Audio())
+          dis(playMusic(false))
         }
       })
   }, [id])
+  // console.log(useSelector((state: RootState) => state?.home))
+  useEffect(() => {
+    // setCurrentSecond(0)
+    // audio.load()
+    audio.pause()
+    if (play) audio?.play()
+  }, [audio, play])
+  const playMusics = () => {
+    if (play) {
+      audio?.pause()
+      dis(playMusic(false))
+    } else {
+      dis(playMusic(true))
+      audio?.play()
+    }
+  }
+  const handleprogressbar = (e: any) => {
+    if (trackRef.current) {
+      const percent = Math.round(
+        ((e.clientX - trackRef.current.getBoundingClientRect().left) / trackRef.current.getBoundingClientRect().width) *
+          100
+      )
 
+      if (thumb.current) {
+        thumb.current.style.cssText = `right:${100 - percent}%`
+        audio.currentTime = (audio.duration * percent) / 100
+        
+      }
+    }
+  }
   return (
     <div className='flex items-center justify-between bg-[rgb(19,12,28)] w-full h-[90px] text-[white] px-[1.75rem] '>
       <div className='flex items-center gap-4 '>
@@ -107,7 +165,7 @@ export const Player = () => {
 
           <div
             className='w-[40px] h-[40px] border-2 rounded-full flex items-center justify-center'
-            onClick={toggle}
+            onClick={playMusics}
             aria-hidden='true'
           >
             {play ? <Icons.CgPlayPause size={25} /> : <Icons.MdPlayArrow size={25} />}
@@ -140,18 +198,17 @@ export const Player = () => {
         </div>
         <div className='flex items-center gap-3'>
           <span className='text-[rgb(136,132,140)] text-[14px] font-bold'>01:22</span>
-          <div className='relative'>
-            <input
-              type='range'
-              className='range z-10'
-              min='0'
-              max='100'
-              // value={range}
-              // onChange={(e) => setRange(Number(e.target.value))}
-            />
-            {/* <p className={className} /> */}
+          <div className='w-full'>
+            <div
+              className=' w-[300px] h-[3px] hover:h-[6px] bg-[white] rounded-md relative  cursor-pointer'
+              onClick={handleprogressbar}
+              aria-hidden='true'
+              ref={trackRef}
+            >
+              <div className='absolute top-0 left-0 bottom-0 bg-[red]  rounded-md  cursor-pointer' ref={thumb}></div>
+            </div>
           </div>
-          <span className='text-[14px] font-bold'>03.22</span>
+          <span className='text-[14px] font-bold'>{covertTime(dataSong?.duration as number)}</span>
         </div>
       </div>
       <div className='flex items-center gap-5 cursor-pointer'>
