@@ -10,7 +10,7 @@ const Header = () => {
   const { authentication, profile } = useContext(AppContext)
 
   return (
-    <header className='h-[75px] flex items-center justify-between bg-[#1F182B] text-[white] px-7 w-[83.33333%]  top-0 fixed '>
+    <header className='h-[75px] flex items-center justify-between bg-[#1F182B] text-[white] px-7 w-[83.33333%]  top-0 fixed z-10 '>
       <div className='flex items-center cursor-pointer'>
         <div className='flex items-center gap-3'>
           <svg

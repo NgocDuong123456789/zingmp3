@@ -10,12 +10,10 @@ import swal from 'sweetalert2'
 import classNames from 'classnames'
 import { songProp } from '../../types/song.types'
 import { musicId } from '~/redux/SliceMusic'
- 
+
 export const Player = () => {
-  
   const [audio, setAudio] = useState<HTMLAudioElement>(new Audio())
   const thumb = useRef<HTMLDivElement>(null)
-  // const [volume, setVolume] = useState<boolean>(false)
   const [repeat, setRepeat] = useState<boolean>(false)
   const [VolumeMedium, setVolumeMedium] = useState<number>(30)
   const music = useSelector((state: RootState) => state.music)
@@ -71,7 +69,7 @@ export const Player = () => {
         }
       })
   }, [id])
-  // console.log(useSelector((state: RootState) => state?.home))
+
   useEffect(() => {
     // setCurrentSecond(0)
     // audio.load()
@@ -124,6 +122,7 @@ export const Player = () => {
       dis(playMusic(true))
     }
   }
+
   const handlePrevSong = () => {
     if (playAlbum) {
       const findIdSong = home.detailplaylist?.data?.song.items.findIndex((item: songProp) => item.encodeId === id)
@@ -136,24 +135,21 @@ export const Player = () => {
     dispatch(musicId(home.detailplaylist?.data?.song.items[randomIndexSong - 1]?.encodeId))
     dis(playMusic(true))
   }
-   let volumes:number
+
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setVolumeMedium(Number(e.target.value))
-    
- 
   }
-  audio.volume=0.3
+  audio.volume = 0.3
   useEffect(() => {
     audio.volume = VolumeMedium / 100
-   
   }, [VolumeMedium])
 
   return (
-    <div className='flex items-center justify-between bg-[rgb(19,12,28)] w-full h-[90px] text-[white] px-[1.75rem] '>
-      <div className='flex items-center gap-4 '>
+    <div className=' items-center grid grid-cols-7  bg-[rgb(19,12,28)] w-full h-[90px] text-[white] px-[1.75rem] '>
+      <div className='flex items-center gap-4 col-span-2'>
         <img src={dataSong?.thumbnail} alt='avatar sing' className='w-[60px] h-[60px] rounded-sm' />
         <div>
-          <h3 className='font-bold'>{dataSong?.title}</h3>
+          <h3 className='font-bold line-clamp-1'>{dataSong?.title}</h3>
           <p className='text-[rgb(136,132,140)]'>{dataSong?.artistsNames}</p>
         </div>
         <svg
@@ -185,7 +181,7 @@ export const Player = () => {
           />
         </svg>
       </div>
-      <div className='flex flex-col  items-center'>
+      <div className='flex flex-col justify-center w-full m-auto   items-center col-span-3'>
         <div className='flex items-center gap-10 cursor-pointer '>
           <Icons.FaRandom
             size={0}
@@ -263,7 +259,7 @@ export const Player = () => {
           <span className='text-[14px] font-bold'>{covertTime(dataSong?.duration as number)}</span>
         </div>
       </div>
-      <div className='flex items-center gap-5 cursor-pointer'>
+      <div className='flex items-center justify-end gap-5 cursor-pointer col-span-2'>
         <svg
           xmlns='http://www.w3.org/2000/svg'
           fill='none'
@@ -285,7 +281,6 @@ export const Player = () => {
           ) : (
             <Icons.ImVolumeMedium size={25} onClick={() => setVolumeMedium(0)} />
           )}
-
           <input
             type='range'
             step='0.1'

@@ -1,6 +1,6 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import https from '../apis/https'
-import { songProp } from '~/types/song.types'
+// import { songProp } from '~/types/song.types'
 import { playList } from '~/types/playList.types'
 interface song {
   err: number
@@ -27,15 +27,11 @@ interface bannerProps {
   ispr: number
   encodeId: string
 }
-interface initialState {
-  banner: bannerProps[]
-  song: song
-  play: boolean
-  alBum: boolean
-  detailplaylist: detailplaylist
-  friday: art[]
+export interface MusicProps{
+  items: art[]
+  title: string
 }
-interface art {
+export interface art {
   artists: [
     {
       alias: string
@@ -59,9 +55,32 @@ interface art {
   thumbnailM: string
   title: string
 }
+interface initialState {
+  banner: bannerProps[]
+  song: song
+  play: boolean
+  alBum: boolean
+  detailplaylist: detailplaylist
+  friday:  MusicProps
+  newEveryMusic:  MusicProps
+  top100:  MusicProps
+  alBumHot: MusicProps
+  newRelease: {
+    title: string
+    items: {
+      all: art[]
+      others: art[]
+      vPop: art[]
+    }
+  }
+}
+
 const initialState: initialState = {
   banner: [],
-  friday: [],
+  friday: {
+    title: '',
+    items: []
+  },
   detailplaylist: {
     err: 0,
     data: {
@@ -78,7 +97,10 @@ const initialState: initialState = {
       }
     }
   },
-
+  top100: {
+    title: '',
+    items: []
+  },
   song: {
     err: 0,
     data: {
@@ -87,9 +109,24 @@ const initialState: initialState = {
     }
   },
   play: false,
-  alBum: false
+  alBum: false,
+  newEveryMusic: {
+    title: '',
+    items: []
+  },
+  alBumHot: {
+    title: '',
+    items: []
+  },
+  newRelease: {
+    title: '',
+    items: {
+      all: [],
+      others: [],
+      vPop: []
+    }
+  }
 }
-
 
 export const fetchHome = createAsyncThunk('home', async (_, thunkAPI) => {
   try {
@@ -158,7 +195,11 @@ export const homeSlice = createSlice({
       .addCase(fetchHome.fulfilled, (state, action) => {
         if (action.payload !== undefined) {
           state.banner = action?.payload?.data?.items?.find((item: any) => item?.sectionId === 'hSlider')?.items
-          state.friday = action?.payload?.data?.items?.find((item: any) => item?.sectionId === 'hArtistTheme')?.items
+          state.friday = action?.payload?.data?.items?.find((item: any) => item?.sectionId === 'hArtistTheme')
+          state.newEveryMusic = action?.payload?.data?.items?.find((item: any) => item?.sectionId === 'hEditorTheme2')
+          state.top100 = action?.payload?.data?.items?.find((item: any) => item?.sectionId === 'h100')
+          state.alBumHot = action?.payload?.data?.items?.find((item: any) => item?.sectionId === 'hAlbum')
+          state.newRelease = action?.payload?.data?.items?.find((item: any) => item?.sectionType === 'new-release')
         }
       })
 
@@ -172,5 +213,6 @@ export const homeSlice = createSlice({
       })
   }
 })
+
 export const { playMusic, playAlbum } = homeSlice.actions
 export default homeSlice.reducer

@@ -34,14 +34,9 @@ export const Abum = () => {
               }`}
             />
             <div className='top-0 right-0 absolute left-0 bottom-0 hover:bg-[rgba(0,0,0,0.3)] hover:rounded-md items-center justify-center flex cursor-pointer'>
-            
-                <span className='p-2 rounded-full border items-center flex justify-center'>
-                  {/* {
-                    play? <AudioLoading  onClick={()=>{}}/> :  <Icons.BsFillPlayFill size={40} />
-                  } */}
-                
-                </span>
-             
+              <span className='p-2 rounded-full border items-center flex justify-center'>
+                {play ? <AudioLoading /> : <Icons.BsFillPlayFill size={40} />}
+              </span>
             </div>
           </div>
 
