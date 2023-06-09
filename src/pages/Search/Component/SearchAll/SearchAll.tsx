@@ -8,10 +8,12 @@ import MVItem from '~/components/MVItem/MVItem'
 import ArtisItem from '~/components/ArtisItem/ArtisItem'
 const SearchAll = () => {
   const searchSong = useSelector((state: RootState) => state.home.searchAll.songs)
- 
+
+  
   const playListSong = useSelector((state: RootState) => state.home.searchAll.playlists)
   const mv = useSelector((state: RootState) => state.home.searchAll.videos)
   const artis = useSelector((state: RootState) => state.home.searchAll.artists)
+   console.log(artis)
   
   return (
     <div className='text-[white]  bg-[#170F23] px-[1.75rem]'>
@@ -23,6 +25,7 @@ const SearchAll = () => {
               return (
                 <OutSandSong
                   key={index}
+                  encodeId={item.encodeId}
                   title={item.title}
                   thumbnail={item.thumbnail}
                   artistsNames={item.artistsNames}
@@ -95,6 +98,7 @@ const SearchAll = () => {
                 thumbnail={item.thumbnail}
                 link={item.link}
                 name={item.name}
+                alias={item.alias}
                 totalFollow={convertLike(item.totalFollow) as number}
               />
             )

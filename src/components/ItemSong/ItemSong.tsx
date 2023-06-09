@@ -34,7 +34,7 @@ const ItemSong = ({ title, link, artistsNames, thumbnail, encodeId }: ItemSongTy
       className='grid col-span-1 pb-6 '
       aria-hidden='true'
       onClick={() => {
-        navigate(link.split('.')[0], { state: { playAlbum: false } })
+        navigate(link.split('.')[0], { state: {playAlbum: false } })
         dispatch(detailplaylist({ id: encodeId }))
       }}
     >
@@ -49,10 +49,10 @@ const ItemSong = ({ title, link, artistsNames, thumbnail, encodeId }: ItemSongTy
             <span className='p-3 rounded-full border-2'>
               <Icons.MdPlayArrow
                 size={30}
-                onClick={(e: any) => {
-                  e.stopPropagation()
-                  navigate(link.split('.')[0], { state: { playAlbum: true } })
-                }}
+                // onClick={(e: any) => {
+                //   e.stopPropagation()
+                //   navigate(link.split('.')[0], {state:{playAlbum: true}})
+                // }}
               />
             </span>
             <Icons.AiOutlineHeart size={25} />

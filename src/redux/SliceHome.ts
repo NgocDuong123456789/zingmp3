@@ -1,6 +1,6 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import https from '../apis/https'
-// import { songProp } from '~/types/song.types'
+
 import { playList } from '~/types/playList.types'
 import { songProp } from '~/types/song.types'
 interface song {
@@ -13,13 +13,13 @@ interface song {
   }
 }
 interface SearchArtistsType {
- 
   id: string
   link: string
   name: string
   playlistId: string
   thumbnail: string
-  totalFollow: number,
+  totalFollow: number
+  alias: string
 }
 interface PlayListSearchSongType {
   artistsNames: string
@@ -27,18 +27,10 @@ interface PlayListSearchSongType {
   link: string
   sortDescription: string
   thumbnail: string
-  title: string,
- 
+  title: string
 }
 
-// interface SearchSongType {
-//   artistsNames: string
-//   encodeId: string
-//   link: string
-//   thumbnail: string
-//   title: string
-//   duration: number
-// }
+
 
 interface SearchVideosType {
   encodeId: string
@@ -65,18 +57,44 @@ interface bannerProps {
   encodeId: string
 }
 export interface MusicProps {
-  items: art[]
+  items: songProp[]
   title: string
+  
 }
 export interface art {
- 
   artistsNames: string
   encodeId: string
   link: string
+  id?:string
+
   sortDescription: string
   thumbnail: string
   thumbnailM: string
+  title: string,
+  duration?:number
+  name?:string
+  alias?:string
+  totalFollow?:number
+  album?:{
+    title: string
+  }
+}
+interface artistsItemType {
   title: string
+  items: art[]
+  sectionId: string
+}
+
+interface artistsType {
+  name: string
+  awards: string[]
+  follow: number
+  national: string
+  realname: string
+  thumbnail: string
+  thumbnailM: string
+  totalFollow: number
+  sections: artistsItemType[]
 }
 interface initialState {
   banner: bannerProps[]
@@ -102,6 +120,7 @@ interface initialState {
     songs: songProp[]
     videos: SearchVideosType[]
   }
+  artists: artistsType
 }
 
 const initialState: initialState = {
@@ -160,6 +179,17 @@ const initialState: initialState = {
     playlists: [],
     songs: [],
     videos: []
+  },
+  artists: {
+    name: '',
+    awards: [],
+    follow: 0,
+    national: '',
+    realname: '',
+    thumbnail: '',
+    thumbnailM: '',
+    totalFollow: 0,
+    sections: []
   }
 }
 
@@ -222,6 +252,18 @@ export const searchSong = createAsyncThunk('search song', async (keyword: { keyw
     if (error?.name === 'AxiosError') return thunkAPI.rejectWithValue(error.response?.data)
   }
 })
+export const artists = createAsyncThunk('artists', async (name: { name: string }, thunkAPI) => {
+  try {
+    const response = await https.get('/api/artist', {
+      params: name,
+      signal: thunkAPI.signal
+    })
+
+    return response?.data
+  } catch (error: any) {
+    if (error?.name === 'AxiosError') return thunkAPI.rejectWithValue(error.response?.data)
+  }
+})
 
 export const homeSlice = createSlice({
   name: 'home',
@@ -255,13 +297,16 @@ export const homeSlice = createSlice({
       })
       .addCase(fetchSong.fulfilled, (state, action) => {
         if (action.payload !== undefined) {
-          state.song = action.payload
+          state.song = action?.payload
         }
       })
       .addCase(searchSong.fulfilled, (state, action) => {
         if (action.payload !== undefined) {
           state.searchAll = action.payload.data
         }
+      })
+      .addCase(artists.fulfilled, (state, action) => {
+        state.artists = action.payload.data
       })
   }
 })

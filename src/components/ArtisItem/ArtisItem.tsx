@@ -1,14 +1,21 @@
 import { Icons } from '~/helper/icons'
 import { Button } from '../Button/Button'
+import { useAppDispatch } from "~/redux/store"
 import { useState, useEffect, useRef } from 'react'
+import { createSearchParams, useNavigate } from 'react-router-dom'
+import { artists } from '~/redux/SliceHome'
 interface ArtisType {
   encodeId: string
   thumbnail: string
   link: string
   name: string
-  totalFollow: number
+  totalFollow: number,
+  alias: string
 }
-const ArtisItem = ({ thumbnail, name, totalFollow }: ArtisType) => {
+const ArtisItem = ({ thumbnail, name, totalFollow ,link,alias
+}: ArtisType) => {
+  const navigate= useNavigate()
+  const dispatch=useAppDispatch()
   const [isShow, setIsShow] = useState<boolean>(false)
   const imageRef = useRef<HTMLImageElement>(null)
   const handleMouseEnter = () => {
@@ -20,7 +27,6 @@ const ArtisItem = ({ thumbnail, name, totalFollow }: ArtisType) => {
   }
   const handleMouseLeave = () => {
     setIsShow(false)
-    
       imageRef?.current?.classList.remove('animate-scale-up-image')
    
   }
@@ -29,7 +35,18 @@ const ArtisItem = ({ thumbnail, name, totalFollow }: ArtisType) => {
     <div
       className='w-full h-full col-span-1 flex flex-col items-center justify-center my-4 cursor-pointer '
       onMouseEnter={handleMouseEnter}
+      aria-hidden="true"
       onMouseLeave={handleMouseLeave}
+       onClick={()=>{
+        navigate({
+          pathname:'/nghe-si',
+          search:createSearchParams({
+            name:name
+          }).toString()
+        })
+        dispatch(artists({name:alias}))
+       }
+      }
     >
       <div className='w-full  relative overflow-hidden rounded-full hover:rounded-full'>
         {isShow && (

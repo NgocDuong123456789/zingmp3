@@ -1,4 +1,4 @@
-import { bool } from 'yup'
+
 
 export interface songProp {
  
@@ -8,8 +8,8 @@ export interface songProp {
   encodeId: string
   album: {
     title: string
-  }
-
+  } 
+  id: string 
   isIndie: boolean
   isOffical: boolean
   isPrivate: boolean

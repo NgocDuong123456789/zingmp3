@@ -10,10 +10,9 @@ import { useState } from 'react'
 import { searchSong } from '../../redux/SliceHome'
 import { RootState, useAppDispatch } from '~/redux/store'
 import { useSelector } from 'react-redux'
-import { Navigate, createSearchParams} from 'react-router-dom'
+import { Navigate, createSearchParams } from 'react-router-dom'
 const Header = () => {
   const navigate = useNavigate()
- 
 
   const dispatch = useAppDispatch()
   const { authentication, profile } = useContext(AppContext)
@@ -22,16 +21,15 @@ const Header = () => {
     if (e.keyCode === 13) {
       dispatch(searchSong({ keyword: searchSongItem }))
       navigate({
-        pathname:`${path.searchSong}/${path.All}`,
+        pathname: `${path.searchSong}/${path.All}`,
         search: createSearchParams({
-          q:searchSongItem
+          q: searchSongItem
         }).toString()
       })
     }
-    
   }
   return (
-    <header className='h-[75px] flex items-center justify-between bg-[#1F182B] text-[white] px-7 w-[83.33333%]  top-0 fixed z-10 '>
+    <header className='h-[75px] flex items-center justify-between bg-[#1F182B] text-[white] px-7 w-[83.33333%]  top-0 fixed z-20 '>
       <div className='flex items-center cursor-pointer'>
         <div className='flex items-center gap-3'>
           <svg

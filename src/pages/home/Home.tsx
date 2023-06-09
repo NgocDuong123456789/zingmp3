@@ -7,13 +7,9 @@ import { Session } from '~/components/Session/Session'
 import SongList from '~/components/SongList/SongList'
 import { RootState } from '~/redux/store'
 import classNames from 'classnames'
-import Chart from '~/components/Chart/Chart'
 
-const array = {
-  all: 'TẤT CẢ',
-  others: 'OTHERS',
-  vPop: 'VPOP'
-}
+
+
 
 const Home = () => {
   

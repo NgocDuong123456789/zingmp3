@@ -10,6 +10,7 @@ import LayoutSearch from './pages/Search/LayoutSearch/LayoutSearch'
 import { SearchMV } from './pages/Search/Component/SearchMV/SearchMV'
 import SearchPlayList from './pages/Search/Component/SearchPlayList/SearchPlayList'
 import { SearchArtist } from './pages/Search/Component/SearchArtist/SearchArtist'
+import Artists from './pages/Artists/Artists'
 const Routes = () => {
   const router = useRoutes([
     {
@@ -35,6 +36,16 @@ const Routes = () => {
           <Abum />
         </LayoutMain>
       )
+    },
+    {
+      
+      path: path.Artists,
+      element: (
+        <LayoutMain>
+          <Artists />
+        </LayoutMain>
+      )
+
     },
 
     {

@@ -4,8 +4,8 @@ import React from 'react'
 const AudioLoading = () => {
   return (
     <Audio
-      height='30'
-      width='30'
+      height='40'
+      width='40'
       color='white'
       ariaLabel='audio-loading'
       wrapperStyle={{}}

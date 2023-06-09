@@ -14,5 +14,6 @@ export const path = {
   All: 'tat-ca',
   play: 'playlist',
   artist: 'artist',
-  mv: 'video'
+  mv: 'video',
+  Artists:'/nghe-si'
 }

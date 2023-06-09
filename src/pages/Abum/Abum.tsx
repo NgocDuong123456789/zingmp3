@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 import { useSelector, useDispatch } from 'react-redux'
 
 import AudioLoading from '../../components/AudioLoading/AudioLoading'
@@ -6,10 +5,10 @@ import { Icons } from '~/helper/icons'
 import { RootState } from '~/redux/store'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { useLocation } from 'react-router-dom'
-import { convertLike, convertNumberToTime, convertToDate, covertTime } from '~/helper/utils'
+import { convertLike, convertNumberToTime, convertToDate } from '~/helper/utils'
 import { songProp } from '~/types/song.types'
 import { musicId } from '~/redux/SliceMusic'
-import { playAlbum, playMusic } from '~/redux/SliceHome'
+import { playMusic } from '~/redux/SliceHome'
 import { useEffect } from 'react'
 import AlbumItem from '~/components/AlbumItem/AlbumItem'
 
@@ -17,18 +16,19 @@ export const Abum = () => {
   const location = useLocation()
   const dispatch = useDispatch()
   const homeList = useSelector((state: RootState) => state?.home)
+
   const playList = homeList?.detailplaylist?.data
+  console.log(playList)
   const play = homeList?.play
 
-  // const {playAlbum}=location.state 
- 
+  // const { playAlbum } = location?.state as any
+
   // useEffect(() => {
-  //   if (playAlbum ) {
+  //   if (playAlbum) {
   //     const randomOneMusic = Math.round(Math.random() * playList?.song?.items.length) - 1
-    
   //     const music = playList?.song?.items[randomOneMusic]
   //     dispatch(musicId(music?.encodeId))
-  //      dispatch(playMusic(true))
+  //     dispatch(playMusic(true))
   //   }
   // }, [playAlbum])
 
@@ -49,7 +49,11 @@ export const Abum = () => {
             />
             <div className='top-0 right-0 absolute left-0 bottom-0 hover:bg-[rgba(0,0,0,0.3)] hover:rounded-md items-center justify-center flex cursor-pointer'>
               <span className='p-2 rounded-full border items-center flex justify-center'>
-                {play ? <AudioLoading /> : <Icons.BsFillPlayFill size={40} />}
+                {play ? (
+                  <span aria-hidden="true" onClick={() => dispatch(playMusic(false))}><AudioLoading  /></span>
+                ) : (
+                  <Icons.BsFillPlayFill size={40} onClick={() => dispatch(playMusic(true))} />
+                )}
               </span>
             </div>
           </div>
@@ -62,11 +66,7 @@ export const Abum = () => {
             })}
           </div>
           <p>{`${convertLike(playList?.like)} người yêu thích`}</p>
-          <div className='flex items-center bg-[rgb(155,77,224)] px-2 py-2 rounded-lg cursor-pointer my-2'>
-            <Icons.CgPlayPause size={25} />
-
-            <p className='text-[14px]'>TIẾP TỤC PHÁT</p>
-          </div>
+       
           <div className='flex items-center gap-3 my-4'>
             <div className='w-[40px] h-[40px] rounded-full bg-[#2F2739] flex items-center justify-center cursor-pointer'>
               <Icons.BsThreeDots size={20} />
@@ -89,8 +89,15 @@ export const Abum = () => {
           <div>
             {playList?.song?.items?.map((item: songProp, index: number) => {
               return (
-              
-                <AlbumItem key={index} encodeId={item.encodeId} title={item.title} duration={item.duration}  thumbnail={item.thumbnail} albumTitle={item?.album?.title} artistsNames={item.artistsNames} />
+                <AlbumItem
+                  key={index}
+                  encodeId={item.encodeId}
+                  title={item.title}
+                  duration={item.duration}
+                  thumbnail={item.thumbnail}
+                  albumTitle={item?.album?.title}
+                  artistsNames={item.artistsNames}
+                />
               )
             })}
           </div>

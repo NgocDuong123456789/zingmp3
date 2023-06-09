@@ -63,7 +63,7 @@ export const Player = () => {
           audio.pause()
           setAudio(new Audio(res?.data?.['128']))
         } else {
-          swal.fire(res?.msg)
+          // swal.fire(res?.msg)
           setAudio(new Audio())
           dis(playMusic(false))
         }
@@ -75,7 +75,7 @@ export const Player = () => {
     // audio.load()
     audio.pause()
     if (play) audio?.play()
-  }, [audio, play])
+  }, [ play,audio])
   const playMusics = () => {
     if (play) {
       audio?.pause()
@@ -145,7 +145,7 @@ export const Player = () => {
   }, [VolumeMedium])
 
   return (
-    <div className=' items-center grid grid-cols-7  bg-[rgb(19,12,28)] w-full h-[90px] text-[white] px-[1.75rem] '>
+    <div className=' items-center grid grid-cols-7  bg-[rgb(19,12,28)] w-full h-[90px] text-[white] px-[1.75rem]  z-[20]'>
       <div className='flex items-center gap-4 col-span-2'>
         <img src={dataSong?.thumbnail} alt='avatar sing' className='w-[60px] h-[60px] rounded-sm' />
         <div>

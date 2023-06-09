@@ -5,6 +5,7 @@ import { covertTime } from '~/helper/utils'
 import { playAlbum, playMusic } from '~/redux/SliceHome'
 import { musicId } from '~/redux/SliceMusic'
 import classNames from 'classnames'
+
 interface AlbumItemType {
   encodeId: string
   thumbnail: string
@@ -13,27 +14,30 @@ interface AlbumItemType {
   duration: number
   albumTitle: string
 }
+
 const AlbumItem = ({ encodeId, thumbnail, title, artistsNames, duration, albumTitle }: AlbumItemType) => {
   const dispatch = useDispatch()
-  const [isHover, setIsHover] = useState<boolean>(false)
+  const [isHover, setIsHover] = useState<boolean>(true)
   const [codeId, setCodeId] = useState<string>('')
-  const handleMouseEnter = () => {
-    setIsHover(true)
-  }
-  const handleMouseLeave = () => {
-    setIsHover(false)
-  }
-  console.log(codeId)
+  // const handleMouseEnter = () => {
+  //   setIsHover(true)
+  // }
+  // const handleMouseLeave = () => {
+  //   setIsHover(false)
+  // }
+
   return (
     <div
-      className={classNames('grid grid-cols-5 w-full f items-center hover:bg-[#423C4B] px-2 hover:rounded-md hover:cursor-pointer border-b border-[#423C4B] ',{
-        'bg-[#2F2739]':codeId===encodeId,
-        'bg-[red]':codeId!==encodeId
+      className={classNames(
+        'grid grid-cols-5 w-full f items-center hover:bg-[#423C4B] px-2 hover:rounded-md hover:cursor-pointer border-b border-[#423C4B] ',
+        // {
+        //   'bg-[#2F2739]': codeId === encodeId,
+        //   'bg-[red]': codeId !== encodeId
+        // }
         
-        
-      })}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      )}
+      // onMouseEnter={handleMouseEnter}
+      // onMouseLeave={handleMouseLeave}
     >
       <div className='gap-2 col-span-2  flex items-center py-3 cursor-pointer'>
         <Icons.BiMusic />
@@ -43,7 +47,8 @@ const AlbumItem = ({ encodeId, thumbnail, title, artistsNames, duration, albumTi
             <div
               className='top-0 left-0 bottom-0 right-0 absolute  flex items-center justify-center '
               aria-hidden='true'
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation()
                 setCodeId(encodeId)
                 dispatch(musicId(encodeId))
                 dispatch(playMusic(true))

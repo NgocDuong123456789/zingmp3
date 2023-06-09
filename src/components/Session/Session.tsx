@@ -1,4 +1,3 @@
-
 import { MusicProps } from '../../redux/SliceHome'
 import ItemSong from '../ItemSong/ItemSong'
 interface typeProps {
@@ -15,8 +14,14 @@ export const Session = ({ data }: typeProps) => {
       <div className='grid grid-cols-5 gap-8'>
         {data.items?.slice(0, 5).map((item) => {
           return (
-            
-            <ItemSong key={item.encodeId} encodeId={item.encodeId} title={item.title} thumbnail={item.thumbnail} link={item.link} artistsNames={item.artistsNames}  />
+            <ItemSong
+              key={item.encodeId}
+              encodeId={item.encodeId}
+              title={item.title}
+              thumbnail={item.thumbnail}
+              link={item.link}
+              artistsNames={item.artistsNames}
+            />
           )
         })}
       </div>
