@@ -1,14 +1,11 @@
 import { bool } from 'yup'
 
 export interface songProp {
-  alias: string
-  allowAudioAds: boolean
+ 
   artistsNames: string
   distributor: string
   duration: number
   encodeId: string
-  hasLyric: boolean
-  indicators: []
   album: {
     title: string
   }

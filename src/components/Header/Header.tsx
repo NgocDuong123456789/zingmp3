@@ -1,14 +1,35 @@
 import { HeadlessTippy } from '../Tippy/Tippy'
 import { Icons } from '../../helper/icons'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { path } from '../../contains/path'
 import { useContext } from 'react'
 import { AppContext } from '~/useContext/Context'
 import { GenerateSideBar } from '../GenerateSideBar/GenerateSideBar'
 import { Button } from '../Button/Button'
+import { useState } from 'react'
+import { searchSong } from '../../redux/SliceHome'
+import { RootState, useAppDispatch } from '~/redux/store'
+import { useSelector } from 'react-redux'
+import { Navigate, createSearchParams} from 'react-router-dom'
 const Header = () => {
-  const { authentication, profile } = useContext(AppContext)
+  const navigate = useNavigate()
+ 
 
+  const dispatch = useAppDispatch()
+  const { authentication, profile } = useContext(AppContext)
+  const [searchSongItem, setSearchSong] = useState<string>('')
+  const handleSearchSong = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.keyCode === 13) {
+      dispatch(searchSong({ keyword: searchSongItem }))
+      navigate({
+        pathname:`${path.searchSong}/${path.All}`,
+        search: createSearchParams({
+          q:searchSongItem
+        }).toString()
+      })
+    }
+    
+  }
   return (
     <header className='h-[75px] flex items-center justify-between bg-[#1F182B] text-[white] px-7 w-[83.33333%]  top-0 fixed z-10 '>
       <div className='flex items-center cursor-pointer'>
@@ -39,6 +60,8 @@ const Header = () => {
             type='text'
             placeholder='Tìm kiếm bài hát, nghệ sĩ,lời bài hát...'
             className='h-[40px] w-[350px] rounded-full pl-8  bg-[#423C4B] outline-none'
+            onChange={(e) => setSearchSong(e.target.value)}
+            onKeyUp={handleSearchSong}
           />
 
           <Icons.BsSearch className='w-5 h-5 absolute left-[7px] top-[50%] text-[black] translate-y-[-50%] fill-[white] ' />

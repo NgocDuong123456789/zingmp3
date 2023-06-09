@@ -4,9 +4,10 @@ import { useSelector } from 'react-redux'
 import { Banner } from '~/components/Banner/Banner'
 import { Button } from '~/components/Button/Button'
 import { Session } from '~/components/Session/Session'
-import SongItem from '~/components/SongItem/SongItem'
+import SongList from '~/components/SongList/SongList'
 import { RootState } from '~/redux/store'
 import classNames from 'classnames'
+import Chart from '~/components/Chart/Chart'
 
 const array = {
   all: 'TẤT CẢ',
@@ -24,18 +25,18 @@ const Home = () => {
   const all = useSelector((state: RootState) => state.home.newRelease.items.all)
   const others = useSelector((state: RootState) => state.home.newRelease.items.others)
   const vPop = useSelector((state: RootState) => state.home.newRelease.items.vPop)
-
+  
   const handleClickButton = (e: React.MouseEvent<HTMLButtonElement>) => {
     setValueButton(e.currentTarget.value)
   }
   return (
     <div className='p-[1.75rem] bg-[#170F23] text-[white] '>
       <Banner />
-      <Session data={firdayData} />
+       <Session data={firdayData} />
       <Session data={newEveryMusic} />
       <Session data={top100} />
-      <Session data={alBumHot} />
-
+      <Session data={alBumHot} /> 
+       
       <div className='mt-[50px]'>
         <h3 className='text-[20px] font-bold'>Mới Phát Hành</h3>
         <div className='py-6'>
@@ -76,7 +77,7 @@ const Home = () => {
             VPOP
           </Button>
         </div>
-        <SongItem data={valueButton === 'all' ? all : valueButton == 'others' ? others : vPop} />
+        <SongList data={valueButton === 'all' ? all : valueButton == 'others' ? others : vPop} />
       </div>
       <div className='mb-[100px] '></div>
     </div>

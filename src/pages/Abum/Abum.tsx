@@ -1,22 +1,36 @@
 /* eslint-disable import/no-unresolved */
 import { useSelector, useDispatch } from 'react-redux'
-import { useEffect } from 'react'
+
 import AudioLoading from '../../components/AudioLoading/AudioLoading'
 import { Icons } from '~/helper/icons'
 import { RootState } from '~/redux/store'
 import { Scrollbars } from 'react-custom-scrollbars-2'
-
+import { useLocation } from 'react-router-dom'
 import { convertLike, convertNumberToTime, convertToDate, covertTime } from '~/helper/utils'
 import { songProp } from '~/types/song.types'
 import { musicId } from '~/redux/SliceMusic'
 import { playAlbum, playMusic } from '~/redux/SliceHome'
-import { spawn } from 'child_process'
+import { useEffect } from 'react'
+import AlbumItem from '~/components/AlbumItem/AlbumItem'
 
 export const Abum = () => {
+  const location = useLocation()
   const dispatch = useDispatch()
   const homeList = useSelector((state: RootState) => state?.home)
   const playList = homeList?.detailplaylist?.data
   const play = homeList?.play
+
+  // const {playAlbum}=location.state 
+ 
+  // useEffect(() => {
+  //   if (playAlbum ) {
+  //     const randomOneMusic = Math.round(Math.random() * playList?.song?.items.length) - 1
+    
+  //     const music = playList?.song?.items[randomOneMusic]
+  //     dispatch(musicId(music?.encodeId))
+  //      dispatch(playMusic(true))
+  //   }
+  // }, [playAlbum])
 
   return (
     <Scrollbars
@@ -73,36 +87,10 @@ export const Abum = () => {
             <p className='col2-span-1  flex items-center justify-end'> THỜI GIAN</p>
           </div>
           <div>
-            {playList?.song?.items?.map((items: songProp, index: number) => {
+            {playList?.song?.items?.map((item: songProp, index: number) => {
               return (
-                <div
-                  key={index}
-                  className='grid grid-cols-5 w-full f items-center hover:bg-[#423C4B] px-2 hover:rounded-md hover:cursor-pointer border-b border-[#423C4B] '
-                >
-                  <div className='gap-2 col-span-2  flex items-center py-3 cursor-pointer'>
-                    <Icons.BiMusic />
-                    <img
-                      aria-hidden='true'
-                      onClick={() => {
-                        dispatch(musicId(items?.encodeId))
-                        dispatch(playMusic(true))
-                        dispatch(playAlbum(true))
-                      }}
-                      src={items?.thumbnail}
-                      alt='ảnh bài hát'
-                      className='w-[40px] h-[40px] object-cover rounded-lg'
-                    />
-                    <div className='flex-col flex items-center'>
-                      <p className='font-semibold text-[14px] line-clamp-1'>{items?.title}</p>
-
-                      <span className='text-[12px] font-semibold text-[#7C7782]'>{items?.artistsNames}</span>
-                    </div>
-                  </div>
-                  <div className='flex items-center justify-center col-span-2 '>
-                    <p className='   line-clamp-1 text-[13px] '>{items?.album?.title}</p>
-                  </div>
-                  <p className='col-span-1 flex items-center justify-end'>{covertTime(items?.duration)}</p>
-                </div>
+              
+                <AlbumItem key={index} encodeId={item.encodeId} title={item.title} duration={item.duration}  thumbnail={item.thumbnail} albumTitle={item?.album?.title} artistsNames={item.artistsNames} />
               )
             })}
           </div>

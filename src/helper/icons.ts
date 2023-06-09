@@ -8,6 +8,7 @@ import {BiMusic} from 'react-icons/bi'
 import {FaRandom} from 'react-icons/fa'
 export const Icons = {
   BsSearch,
+  
   CgPlayPause,
   MdPlayArrow,
   AiOutlineHeart,
@@ -18,5 +19,6 @@ export const Icons = {
   FaRandom,
   BsArrowRepeat,
   BsFillPlayFill,
-  BsFillVolumeMuteFill
+  BsFillVolumeMuteFill,
+  
 }

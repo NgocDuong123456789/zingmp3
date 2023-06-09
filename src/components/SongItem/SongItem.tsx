@@ -1,42 +1,35 @@
 import { useDispatch } from 'react-redux'
 import { playMusic } from '~/redux/SliceHome'
 import { musicId } from '~/redux/SliceMusic'
-import { art } from '../../redux/SliceHome'
-interface musicProp {
-  data: art[]
+interface SongItemType {
+  title: string
+  thumbnail: string
+  encodeId: string
+  artistsNames: string
+  time?: string
 }
-const SongItem = ({ data }: musicProp) => {
+export const SongItem = ({ title, thumbnail, artistsNames, encodeId, time }: SongItemType) => {
   const dispatch = useDispatch()
   return (
-    <div>
-      <div className='grid grid-cols-3 gap-3'>
-        {data?.slice(0, 12)?.map((item: art) => {
-          return (
-            <div
-              key={item.encodeId}
-              className='w-full col-span-1 flex items-center mb-5 gap-3 cursor-pointer hover:bg-[#2F2739] hover:rounded-lg hover:z-10'
-            >
-              <img
-                src={item?.thumbnail}
-                alt='avatar'
-                className='w-[70px] h-[70px] rounded-sm'
-                aria-hidden='true'
-                onClick={() => {
-                  dispatch(playMusic(true))
-                  dispatch(musicId(item?.encodeId))
-                }}
-              />
-              <div>
-                <h3 className='text-[15px]'>{item.title}</h3>
-                <p className='text-[13px] text-[hsla(0,0%,100%,0.5)]'>{item.artistsNames}</p>
-                <p className='text-[13px] text-[hsla(0,0%,100%,0.5)]'>4 ngày trước</p>
-              </div>
-            </div>
-          )
-        })}
+    <div className='w-full col-span-1 flex items-center mb-5 justify-between cursor-pointer hover:bg-[#2F2739] hover:rounded-lg hover:z-10 pr-5'>
+      <div className='flex items-center gap-3'>
+        <img
+          src={thumbnail}
+          alt='avatar'
+          className='w-[70px] h-[70px] rounded-sm'
+          aria-hidden='true'
+          onClick={() => {
+            dispatch(playMusic(true))
+            dispatch(musicId(encodeId))
+          }}
+        />
+        <div>
+          <h3 className='text-[15px]'>{title}</h3>
+          <p className='text-[13px] text-[hsla(0,0%,100%,0.5)]'>{artistsNames}</p>
+          <p className='text-[13px] text-[hsla(0,0%,100%,0.5)]'>4 ngày trước</p>
+        </div>
       </div>
+      <div>{time}</div>
     </div>
   )
 }
-
-export default SongItem

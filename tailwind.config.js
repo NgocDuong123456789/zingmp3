@@ -33,12 +33,23 @@ export default {
             '-webkit-transform': 'rotate(360deg)',
             transform: 'rotate(360deg)'
           }
+        },
+        'scale-up-image': {
+          ' 0%': {
+            '-webkit-transform': 'scale(1)',
+            transform: 'scale(1)'
+          },
+          '100%': {
+            '-webkit-transform': 'scale(1.2)',
+            transform: 'scale(1.2)'
+          }
         }
       },
       animation: {
         slide: ' slide-right 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both',
         rotateCenter:'rotate-center 4s linear infinite',
-        'rotate-center-pause':'rotate-center-pause 0.5s linear  3 both'
+        'rotate-center-pause':'rotate-center-pause 0.5s linear  3 both',
+        'scale-up-image':'scale-up-image 1s linear',
       }
     }
   },

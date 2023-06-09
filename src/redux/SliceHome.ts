@@ -2,6 +2,7 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import https from '../apis/https'
 // import { songProp } from '~/types/song.types'
 import { playList } from '~/types/playList.types'
+import { songProp } from '~/types/song.types'
 interface song {
   err: number
   msg?: string
@@ -11,11 +12,47 @@ interface song {
     320: string
   }
 }
+interface SearchArtistsType {
+ 
+  id: string
+  link: string
+  name: string
+  playlistId: string
+  thumbnail: string
+  totalFollow: number,
+}
+interface PlayListSearchSongType {
+  artistsNames: string
+  encodeId: string
+  link: string
+  sortDescription: string
+  thumbnail: string
+  title: string,
+ 
+}
+
+// interface SearchSongType {
+//   artistsNames: string
+//   encodeId: string
+//   link: string
+//   thumbnail: string
+//   title: string
+//   duration: number
+// }
+
+interface SearchVideosType {
+  encodeId: string
+  link: string
+  thumbnail: string
+  title: string
+  artistsNames: string
+  thumbnailM: string
+}
+
 interface detailplaylist {
   err: number
   data: playList
 }
-
 interface bannerProps {
   type: number
   link: string
@@ -27,26 +64,12 @@ interface bannerProps {
   ispr: number
   encodeId: string
 }
-export interface MusicProps{
+export interface MusicProps {
   items: art[]
   title: string
 }
 export interface art {
-  artists: [
-    {
-      alias: string
-      id: string
-      isOA: boolean
-      isOABrand: boolean
-      link: string
-      name: string
-      playlistId: string
-      spotlight: false
-      thumbnail: string
-      thumbnailM: string
-      totalFollow: number
-    }
-  ]
+ 
   artistsNames: string
   encodeId: string
   link: string
@@ -61,9 +84,9 @@ interface initialState {
   play: boolean
   alBum: boolean
   detailplaylist: detailplaylist
-  friday:  MusicProps
-  newEveryMusic:  MusicProps
-  top100:  MusicProps
+  friday: MusicProps
+  newEveryMusic: MusicProps
+  top100: MusicProps
   alBumHot: MusicProps
   newRelease: {
     title: string
@@ -72,6 +95,12 @@ interface initialState {
       others: art[]
       vPop: art[]
     }
+  }
+  searchAll: {
+    artists: SearchArtistsType[]
+    playlists: PlayListSearchSongType[]
+    songs: songProp[]
+    videos: SearchVideosType[]
   }
 }
 
@@ -125,6 +154,12 @@ const initialState: initialState = {
       others: [],
       vPop: []
     }
+  },
+  searchAll: {
+    artists: [],
+    playlists: [],
+    songs: [],
+    videos: []
   }
 }
 
@@ -175,6 +210,18 @@ export const fetchSong = createAsyncThunk('song', async (id: { id: string }, thu
     if (error?.name === 'AxiosError') return thunkAPI.rejectWithValue(error.response?.data)
   }
 })
+export const searchSong = createAsyncThunk('search song', async (keyword: { keyword: string }, thunkAPI) => {
+  try {
+    const response = await https.get('/api/search', {
+      params: keyword,
+      signal: thunkAPI.signal
+    })
+
+    return response?.data
+  } catch (error: any) {
+    if (error?.name === 'AxiosError') return thunkAPI.rejectWithValue(error.response?.data)
+  }
+})
 
 export const homeSlice = createSlice({
   name: 'home',
@@ -209,6 +256,11 @@ export const homeSlice = createSlice({
       .addCase(fetchSong.fulfilled, (state, action) => {
         if (action.payload !== undefined) {
           state.song = action.payload
+        }
+      })
+      .addCase(searchSong.fulfilled, (state, action) => {
+        if (action.payload !== undefined) {
+          state.searchAll = action.payload.data
         }
       })
   }
