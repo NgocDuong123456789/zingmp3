@@ -145,7 +145,7 @@ export const Player = () => {
   }, [VolumeMedium])
 
   return (
-    <div className=' items-center grid grid-cols-7  bg-[rgb(19,12,28)] w-full h-[90px] text-[white] px-[1.75rem]  z-[20]'>
+    <div className=' items-center grid grid-cols-7  bg-[rgb(19,12,28)] w-full h-[90px] text-[white] px-[1.75rem]  z-50 fixed bottom-0 '>
       <div className='flex items-center gap-4 col-span-2'>
         <img src={dataSong?.thumbnail} alt='avatar sing' className='w-[60px] h-[60px] rounded-sm' />
         <div>
@@ -209,11 +209,11 @@ export const Player = () => {
           </svg>
 
           <div
-            className='w-[40px] h-[40px] border-2 rounded-full flex items-center justify-center'
+            className='w-[40px] h-[40px] border-2 rounded-full flex items-center justify-center hover:text-[#8B45CA] hover:border-[#8B45CA]'
             onClick={playMusics}
             aria-hidden='true'
           >
-            {play ? <Icons.CgPlayPause size={25} /> : <Icons.MdPlayArrow size={25} />}
+            {play ? <Icons.CgPlayPause size={25}  /> : <Icons.MdPlayArrow size={25} />}
           </div>
           <svg
             xmlns='http://www.w3.org/2000/svg'
@@ -260,20 +260,7 @@ export const Player = () => {
         </div>
       </div>
       <div className='flex items-center justify-end gap-5 cursor-pointer col-span-2'>
-        <svg
-          xmlns='http://www.w3.org/2000/svg'
-          fill='none'
-          viewBox='0 0 24 24'
-          strokeWidth={1.5}
-          stroke='currentColor'
-          className='w-6 h-6'
-        >
-          <path
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            d='M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z'
-          />
-        </svg>
+        
 
         <div className='flex items-center gap-2'>
           {VolumeMedium <= 0 ? (

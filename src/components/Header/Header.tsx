@@ -1,16 +1,18 @@
+
+
 import { HeadlessTippy } from '../Tippy/Tippy'
 import { Icons } from '../../helper/icons'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, createSearchParams } from 'react-router-dom'
 import { path } from '../../contains/path'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { AppContext } from '~/useContext/Context'
 import { GenerateSideBar } from '../GenerateSideBar/GenerateSideBar'
 import { Button } from '../Button/Button'
-import { useState } from 'react'
+
 import { searchSong } from '../../redux/SliceHome'
 import { RootState, useAppDispatch } from '~/redux/store'
-import { useSelector } from 'react-redux'
-import { Navigate, createSearchParams } from 'react-router-dom'
+// import { useSelector } from 'react-redux'
+
 const Header = () => {
   const navigate = useNavigate()
 
@@ -32,26 +34,30 @@ const Header = () => {
     <header className='h-[75px] flex items-center justify-between bg-[#1F182B] text-[white] px-7 w-[83.33333%]  top-0 fixed z-20 '>
       <div className='flex items-center cursor-pointer'>
         <div className='flex items-center gap-3'>
-          <svg
-            xmlns='http://www.w3.org/2000/svg'
-            fill='none'
-            viewBox='0 0 24 24'
-            strokeWidth={1.5}
-            stroke='currentColor'
-            className='w-7 h-7'
-          >
-            <path strokeLinecap='round' strokeLinejoin='round' d='M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18' />
-          </svg>
-          <svg
-            xmlns='http://www.w3.org/2000/svg'
-            fill='none'
-            viewBox='0 0 24 24'
-            strokeWidth={1.5}
-            stroke='currentColor'
-            className='w-7 h-7 mr-4'
-          >
-            <path strokeLinecap='round' strokeLinejoin='round' d='M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3' />
-          </svg>
+          <Link to={path.home} className='hover:text-[#C273ED]'>
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              fill='none'
+              viewBox='0 0 24 24'
+              strokeWidth={1.5}
+              stroke='currentColor'
+              className='w-7 h-7 '
+            >
+              <path strokeLinecap='round' strokeLinejoin='round' d='M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18' />
+            </svg>
+          </Link>
+          <button onClick={() => navigate(-1)} className='hover:text-[#C273ED]'>
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              fill='none'
+              viewBox='0 0 24 24'
+              strokeWidth={1.5}
+              stroke='currentColor'
+              className='w-7 h-7 mr-4 '
+            >
+              <path strokeLinecap='round' strokeLinejoin='round' d='M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3' />
+            </svg>
+          </button>
         </div>
         <div className='relative'>
           <input

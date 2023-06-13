@@ -25,10 +25,10 @@ const MVItem = ({ encodeId, title, thumbnail, link, artistsNames, thumbnailM }: 
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div className='w-full relative overflow-hidden hover:rounded-2xl'>
-        <img src={thumbnail} alt='ảnh video' className='w-full object-cover rounded-2xl ' ref={imageRef} />
+      <div className='w-full relative overflow-hidden hover:rounded-2xl rounded-2xl'>
+        <img src={thumbnail} alt='ảnh video' className='w-full object-cover rounded-2xl' ref={imageRef} />
         {isHover && (
-          <div className='top-0 left-0 right-0 bottom-0 absolute flex items-center justify-center bg-[rgba(0,0,0,0.3)] z-5'>
+          <div className='top-0 left-0 right-0 bottom-0 absolute flex items-center justify-center bg-[rgba(0,0,0,0.3)] z-5 '>
             <span className='border-2 p-3 rounded-full'>
               <Icons.BsFillPlayFill size={30} />
             </span>

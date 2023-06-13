@@ -9,16 +9,17 @@ import { convertLike, convertNumberToTime, convertToDate } from '~/helper/utils'
 import { songProp } from '~/types/song.types'
 import { musicId } from '~/redux/SliceMusic'
 import { playMusic } from '~/redux/SliceHome'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import AlbumItem from '~/components/AlbumItem/AlbumItem'
 
-export const Abum = () => {
-  const location = useLocation()
+ export const Abum = () => {
+//   const location = useLocation()
   const dispatch = useDispatch()
+  const [codeId, setCodeId] = useState<string>('')
   const homeList = useSelector((state: RootState) => state?.home)
 
   const playList = homeList?.detailplaylist?.data
-  console.log(playList)
+
   const play = homeList?.play
 
   // const { playAlbum } = location?.state as any
@@ -31,12 +32,16 @@ export const Abum = () => {
   //     dispatch(playMusic(true))
   //   }
   // }, [playAlbum])
-
+  const renderThumb = () => {
+    const thumbStyle = {
+      backgroundColor: '#4A4250',
+      borderRadius: '8px',
+      marginTop: '40px'
+    }
+    return <div style={{ ...thumbStyle }} />
+  }
   return (
-    <Scrollbars
-      style={{ width: '100%', height: 600, marginTop: 74 }}
-      className='scrollbar-thin scrollbar-thumb-[#170F23] scrollbar-track-[red]'
-    >
+    <Scrollbars style={{ width: '100%', height: 600, marginTop: 74 }} renderThumbVertical={renderThumb}>
       <div className='grid grid-cols-12 px-[1.75rem] bg-[#170F23] text-[white] gap-[20px] py-[60px] w-full'>
         <div className=' col-span-3 flex flex-col w-full items-center  '>
           <div className='w-full relative overflow-hidden'>
@@ -50,7 +55,9 @@ export const Abum = () => {
             <div className='top-0 right-0 absolute left-0 bottom-0 hover:bg-[rgba(0,0,0,0.3)] hover:rounded-md items-center justify-center flex cursor-pointer'>
               <span className='p-2 rounded-full border items-center flex justify-center'>
                 {play ? (
-                  <span aria-hidden="true" onClick={() => dispatch(playMusic(false))}><AudioLoading  /></span>
+                  <span aria-hidden='true' onClick={() => dispatch(playMusic(false))}>
+                    <AudioLoading />
+                  </span>
                 ) : (
                   <Icons.BsFillPlayFill size={40} onClick={() => dispatch(playMusic(true))} />
                 )}
@@ -66,7 +73,7 @@ export const Abum = () => {
             })}
           </div>
           <p>{`${convertLike(playList?.like)} người yêu thích`}</p>
-       
+
           <div className='flex items-center gap-3 my-4'>
             <div className='w-[40px] h-[40px] rounded-full bg-[#2F2739] flex items-center justify-center cursor-pointer'>
               <Icons.BsThreeDots size={20} />
@@ -90,6 +97,8 @@ export const Abum = () => {
             {playList?.song?.items?.map((item: songProp, index: number) => {
               return (
                 <AlbumItem
+                codeId={codeId}
+                setCodeId={setCodeId}
                   key={index}
                   encodeId={item.encodeId}
                   title={item.title}

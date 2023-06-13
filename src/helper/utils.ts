@@ -23,8 +23,6 @@ export const convertLike = (number: number) => {
     return `${Math.floor(number / 10000)}M`
   }
 }
-
-
 export const  convertNumberToTime=(number:number)=> {
   
   if(number >= 3600){
@@ -34,9 +32,6 @@ export const  convertNumberToTime=(number:number)=> {
   }else {
     const hours = Math.floor(number / 60); // Số giờ
     const minutes = number % 60; // Số phút
-    return hours + "phút " + minutes + "giây";
+    return hours + " phút " + minutes + " giây ";
   }
-
-
-  
 }

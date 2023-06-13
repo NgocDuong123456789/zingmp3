@@ -14,8 +14,8 @@ export const LayoutMain = ({ children }: Props) => {
           <Header />
         <div>{children}</div>
       </div>
-      <div className=' bottom-0 w-full fixed'>
-        <Player />{' '}
+      <div className=''>
+        <Player />
       </div>
     </div>
   )

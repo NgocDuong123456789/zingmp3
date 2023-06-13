@@ -186,11 +186,6 @@ const Sidebar = () => {
         </Link>
       </div>
 
-      <div className='bg-[rgb(155,77,224)] text-[white] w-[80%] py-6 rounded-lg m-auto mt-[20px] flex flex-col items-center justify-center'>
-        <span className='text-[15px] mb-[15px]'>Đăng nhập để khám phá playlist riêng cho bạn</span>
-
-        <Button className='w-[80%]  h-[40px] outline-none border-2 rounded-full text-[15px]'>Đăng nhập</Button>
-      </div>
       <GenerateSideBar className='cursor-pointer flex items-center gap-3  py-4  absolute bottom-0 border-t-2 border-[#393142] w-full'>
         {' '}
         <svg

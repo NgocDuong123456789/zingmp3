@@ -1,4 +1,5 @@
 import { useSelector } from 'react-redux'
+
 import { RootState } from '~/redux/store'
 import OutSandSong from '../OutStandSong/OutSandSong'
 import { SongItem } from '~/components/SongItem/SongItem'
@@ -6,15 +7,13 @@ import { convertLike, covertTime } from '~/helper/utils'
 import ItemSong from '~/components/ItemSong/ItemSong'
 import MVItem from '~/components/MVItem/MVItem'
 import ArtisItem from '~/components/ArtisItem/ArtisItem'
-const SearchAll = () => {
-  const searchSong = useSelector((state: RootState) => state.home.searchAll.songs)
 
-  
-  const playListSong = useSelector((state: RootState) => state.home.searchAll.playlists)
-  const mv = useSelector((state: RootState) => state.home.searchAll.videos)
-  const artis = useSelector((state: RootState) => state.home.searchAll.artists)
-   console.log(artis)
-  
+const SearchAll = () => {
+  const searchSong = useSelector((state: RootState) => state?.home?.searchAll?.songs)
+  const playListSong = useSelector((state: RootState) => state?.home?.searchAll?.playlists)
+  const mv = useSelector((state: RootState) => state?.home?.searchAll?.videos)
+  const artis = useSelector((state: RootState) => state?.home?.searchAll?.artists)
+
   return (
     <div className='text-[white]  bg-[#170F23] px-[1.75rem]'>
       <div className='pb-[30px]'>
@@ -86,11 +85,11 @@ const SearchAll = () => {
             )
           })}
         </div>
-      </div>  
+      </div>
       <div className='pb-[150px]'>
         <h2 className='text-[18px] font-bold py-4'>Nghệ Sĩ/OA</h2>
         <div className='grid grid-cols-5 gap-4'>
-          {artis?.slice(0, 5)?.map(item => {
+          {artis?.slice(0, 5)?.map((item) => {
             return (
               <ArtisItem
                 key={item.id}

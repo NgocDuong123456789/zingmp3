@@ -4,7 +4,7 @@ import { useAppDispatch, RootState } from '~/redux/store'
 import { detailplaylist, fetchHome, playAlbum, playMusic } from '../../redux/SliceHome'
 import { musicId } from '~/redux/SliceMusic'
 import { useNavigate } from 'react-router-dom'
-import { link } from 'fs'
+
 
 interface banner {
   banner: string
@@ -67,7 +67,8 @@ export const Banner = () => {
     }
   }
   return (
-    <div className='w-full gap-4 flex items-center overflow-hidden rounded-lg relative mt-[80px]'>
+ 
+ <div className='w-full gap-4 flex items-center overflow-hidden rounded-lg relative mt-[80px] cursor-pointer'>
       {homeList?.banner?.map((item: banner, index: number) => (
         <img
           src={item?.banner}
@@ -107,5 +108,7 @@ export const Banner = () => {
         </div>
       </div>
     </div>
+   
+   
   )
 }
