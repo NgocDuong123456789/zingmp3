@@ -6,6 +6,7 @@ import { ImVolumeMedium } from 'react-icons/im'
 import {GiLevelThreeAdvanced} from 'react-icons/gi'
 import {BiMusic} from 'react-icons/bi'
 import {FaRandom} from 'react-icons/fa'
+import {GiLoveSong} from 'react-icons/gi'
 export const Icons = {
   BsSearch,
   
@@ -20,5 +21,5 @@ export const Icons = {
   BsArrowRepeat,
   BsFillPlayFill,
   BsFillVolumeMuteFill,
-  
+  GiLoveSong,
 }

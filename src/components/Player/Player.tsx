@@ -1,15 +1,14 @@
 import { Icons } from '../../helper/icons'
 import { useState, useEffect, useRef } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import classNames from 'classnames'
 
 import { fetchInfoSong, fetchSong, playMusic } from '../../redux/SliceHome'
-import { useSelector, useDispatch } from 'react-redux'
 import { RootState, useAppDispatch } from '~/redux/store'
-
 import { covertTime } from '~/helper/utils'
-import swal from 'sweetalert2'
-import classNames from 'classnames'
 import { songProp } from '../../types/song.types'
 import { musicId } from '~/redux/SliceMusic'
+let timer: any
 
 export const Player = () => {
   const [audio, setAudio] = useState<HTMLAudioElement>(new Audio())
@@ -18,34 +17,16 @@ export const Player = () => {
   const [VolumeMedium, setVolumeMedium] = useState<number>(30)
   const music = useSelector((state: RootState) => state.music)
   const home = useSelector((state: RootState) => state.home)
-
   const id = music.id as string
-
   const play = home.play
   const playAlbum = home.alBum
   const trackRef = useRef<HTMLDivElement>(null)
   const dispatch = useAppDispatch()
   const dis = useDispatch()
+  const [currentTime, setCurrentTime] = useState<string | number>('00:00')
   const [dataSong, setDataSong] = useState<songProp | null>(null)
-  const [shift, setShift] = useState<boolean>(false)
 
-  // useEffect(() => {
-  //   if (play) {
-  //     intervalId = setInterval(() => {
-  //       // eslint-disable-next-line prefer-const
-  //       let percent = Math.round((audio?.currentTime * 10000) / (dataSong?.duration as number)) / 100
-  //       // console.log(Math.round(audio?.currentTime))
-  //       // setCurrentSecond(Math.round(audio?.currentTime))
-  //       // console.log(audio?.current.currentTime)
-  //       // console.log(dataSong?.duration)
-  //       if (thumb?.current !== null) {
-  //         thumb.current.style.cssText = `right: ${100 - percent}%`
-  //       }
-  //     }, 1000)
-  //   } else {
-  //     return () => clearInterval(intervalId as number | string)
-  //   }
-  // }, [play])
+  const [shift, setShift] = useState<boolean>(false)
 
   useEffect(() => {
     dispatch(fetchInfoSong({ id }))
@@ -53,7 +34,6 @@ export const Player = () => {
       .then((res) => {
         if (res.err === 0) {
           setDataSong(res?.data)
-          // setCurrentSecond(0)
         }
       })
     dispatch(fetchSong({ id }))
@@ -63,7 +43,6 @@ export const Player = () => {
           audio.pause()
           setAudio(new Audio(res?.data?.['128']))
         } else {
-          // swal.fire(res?.msg)
           setAudio(new Audio())
           dis(playMusic(false))
         }
@@ -71,11 +50,20 @@ export const Player = () => {
   }, [id])
 
   useEffect(() => {
-    // setCurrentSecond(0)
-    // audio.load()
+    timer && clearInterval(timer as any)
+    audio.currentTime = 0
+    audio.load()
     audio.pause()
-    if (play) audio?.play()
-  }, [ play,audio])
+    if (play) {
+      audio?.play()
+      timer = setInterval(() => {
+        setCurrentTime(covertTime(audio.currentTime))
+        const percent = Math.round((audio?.currentTime * 10000) / (dataSong?.duration as number)) / 100
+        ;(thumb?.current as HTMLDivElement).style.cssText = `right:${100 - percent}%`
+      }, 1000)
+    }
+  }, [audio ,play])
+
   const playMusics = () => {
     if (play) {
       audio?.pause()
@@ -107,7 +95,6 @@ export const Player = () => {
         ((e.clientX - trackRef.current.getBoundingClientRect().left) / trackRef.current.getBoundingClientRect().width) *
           100
       )
-
       if (thumb.current) {
         thumb.current.style.cssText = `right:${100 - percent}%`
         audio.currentTime = (audio.duration * percent) / 100
@@ -213,7 +200,7 @@ export const Player = () => {
             onClick={playMusics}
             aria-hidden='true'
           >
-            {play ? <Icons.CgPlayPause size={25}  /> : <Icons.MdPlayArrow size={25} />}
+            {play ? <Icons.CgPlayPause size={25} /> : <Icons.MdPlayArrow size={25} />}
           </div>
           <svg
             xmlns='http://www.w3.org/2000/svg'
@@ -233,7 +220,6 @@ export const Player = () => {
               d='M3 8.688c0-.864.933-1.405 1.683-.977l7.108 4.062a1.125 1.125 0 010 1.953l-7.108 4.062A1.125 1.125 0 013 16.81V8.688zM12.75 8.688c0-.864.933-1.405 1.683-.977l7.108 4.062a1.125 1.125 0 010 1.953l-7.108 4.062a1.125 1.125 0 01-1.683-.977V8.688z'
             />
           </svg>
-
           <Icons.BsArrowRepeat
             size={23}
             title='Bật phát lại 1 bài'
@@ -245,7 +231,7 @@ export const Player = () => {
           />
         </div>
         <div className='flex items-center gap-3'>
-          <span className='text-[rgb(136,132,140)] text-[14px] font-bold'>01:22</span>
+          <span className='text-[rgb(136,132,140)] text-[14px] font-bold'>{currentTime}</span>
           <div className='w-full'>
             <div
               className=' w-[300px] h-[3px] hover:h-[6px] bg-[white] rounded-md relative  cursor-pointer'
@@ -260,8 +246,6 @@ export const Player = () => {
         </div>
       </div>
       <div className='flex items-center justify-end gap-5 cursor-pointer col-span-2'>
-        
-
         <div className='flex items-center gap-2'>
           {VolumeMedium <= 0 ? (
             <Icons.BsFillVolumeMuteFill size={25} onClick={() => setVolumeMedium(40)} />

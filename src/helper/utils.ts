@@ -9,7 +9,7 @@ export const convertToDate = (number: number) => {
 
 export const covertTime = (time: number) => {
   const mu = Math.floor(time / 60)
-  const s = time % 60 < 10 ? `0${time % 60}` : time % 60
+  const s = Math.floor(time - mu*60) < 10 ? `0${Math.floor(time - mu*60)}` : Math.floor(time - mu*60)
 
   return `0${mu}:${s}`
 }

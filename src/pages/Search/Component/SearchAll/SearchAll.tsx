@@ -7,20 +7,31 @@ import { convertLike, covertTime } from '~/helper/utils'
 import ItemSong from '~/components/ItemSong/ItemSong'
 import MVItem from '~/components/MVItem/MVItem'
 import ArtisItem from '~/components/ArtisItem/ArtisItem'
+import { Skeleton } from '~/components/Skeleton/Skeleton'
 
 const SearchAll = () => {
   const searchSong = useSelector((state: RootState) => state?.home?.searchAll?.songs)
   const playListSong = useSelector((state: RootState) => state?.home?.searchAll?.playlists)
   const mv = useSelector((state: RootState) => state?.home?.searchAll?.videos)
+  const song = useSelector((state: RootState) => state?.home?.searchAll)
+  console.log(song)
   const artis = useSelector((state: RootState) => state?.home?.searchAll?.artists)
-
+  const isLoading= useSelector((state: RootState) => state?.home?.isLoading)
   return (
-    <div className='text-[white]  bg-[#170F23] px-[1.75rem]'>
+    <div>{
+      isLoading ? ( <div className='px-4 mt-[50px]  w-full items-center grid grid-cols-3 gap-4'>
+      <Skeleton />
+      <Skeleton />
+      <Skeleton />
+      <Skeleton />
+      <Skeleton />
+      <Skeleton />
+    </div>) : ( <div className='text-[white]  bg-[#170F23] px-[1.75rem]'>
       <div className='pb-[30px]'>
         <h2 className='text-[18px] font-bold py-4'>Nổi Bật</h2>
         <div>
           <div className='grid grid-cols-3 gap-9'>
-            {searchSong.slice(0, 3).map((item, index) => {
+            {searchSong?.slice(0, 3)?.map((item, index) => {
               return (
                 <OutSandSong
                   key={index}
@@ -104,7 +115,11 @@ const SearchAll = () => {
           })}
         </div>
       </div>
+    </div>)
+    }
     </div>
+       
+ 
   )
 }
 

@@ -1,8 +1,11 @@
-import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { AsyncThunk, PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import https from '../apis/https'
-
 import { playList } from '~/types/playList.types'
 import { songProp } from '~/types/song.types'
+type GenericAsyncThunk = AsyncThunk<unknown, unknown, any>
+type PendingAction = ReturnType<GenericAsyncThunk['pending']>
+type RejectedAction = ReturnType<GenericAsyncThunk['rejected']>
+type FulfilledAction = ReturnType<GenericAsyncThunk['fulfilled']>
 interface song {
   err: number
   msg?: string
@@ -29,8 +32,6 @@ interface PlayListSearchSongType {
   thumbnail: string
   title: string
 }
-
-
 
 interface SearchVideosType {
   encodeId: string
@@ -59,27 +60,26 @@ interface bannerProps {
 export interface MusicProps {
   items: songProp[]
   title: string
-  
 }
 export interface art {
   artistsNames: string
   encodeId: string
   link: string
-  id?:string
+  id?: string
 
   sortDescription: string
   thumbnail: string
   thumbnailM: string
-  title: string,
-  duration?:number
-  name?:string
-  alias?:string
-  totalFollow?:number
-  album?:{
+  title: string
+  duration?: number
+  name?: string
+  alias?: string
+  totalFollow?: number
+  album?: {
     title: string
   }
 }
-interface artistsItemType {
+export interface artistsItemType {
   title: string
   items: art[]
   sectionId: string
@@ -121,6 +121,8 @@ interface initialState {
     videos: SearchVideosType[]
   }
   artists: artistsType
+  isLoading: boolean
+  RequestId: undefined | string
 }
 
 const initialState: initialState = {
@@ -190,7 +192,9 @@ const initialState: initialState = {
     thumbnailM: '',
     totalFollow: 0,
     sections: []
-  }
+  },
+  isLoading: false,
+  RequestId: undefined
 }
 
 export const fetchHome = createAsyncThunk('home', async (_, thunkAPI) => {
@@ -307,6 +311,26 @@ export const homeSlice = createSlice({
       })
       .addCase(artists.fulfilled, (state, action) => {
         state.artists = action.payload.data
+      })
+      .addMatcher<FulfilledAction>(
+        (action) => action.type.endsWith('/pending'),
+        (state, action) => {
+          state.isLoading = true
+          state.RequestId = action.meta.requestId
+        }
+      )
+      
+      .addMatcher<PendingAction | RejectedAction>(
+        (action) => action.type.endsWith('/fulfilled') || action.type.endsWith('/rejected'),
+        (state, action) => {
+          if (state.isLoading && state.RequestId === action.meta.requestId) {
+            state.isLoading = false
+            state.RequestId = undefined
+          }
+        }
+      )
+      .addDefaultCase((state) => {
+        return state
       })
   }
 })

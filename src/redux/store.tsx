@@ -1,6 +1,6 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import { useDispatch } from 'react-redux'
-import SliceAuth from './SliceAuth'
+ import SliceAuth from './SliceAuth'
 import homeSlice from './SliceHome'
 import countReducer from './SliceMusic'
 import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist'
@@ -11,11 +11,11 @@ const persistConfig = {
   version: 1,
   storage
 }
-// +
+
 const persistedReducer = persistReducer(persistConfig, countReducer)
 export const store = configureStore({
   reducer: {
-    home: homeSlice,
+     home: homeSlice,
     music: persistedReducer
   },
   middleware: (getDefaultMiddleware) =>

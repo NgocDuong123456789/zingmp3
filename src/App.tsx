@@ -1,13 +1,14 @@
-
 import 'tippy.js/dist/tippy.css'
 
 import Routes from './useRouter'
-function App() {
- 
 
+function App() {
   return (
-  <div>{Routes()}</div>
-  );
+    <div>
+      {Routes()}
+     
+    </div>
+  )
 }
 
-export default App;
+export default App

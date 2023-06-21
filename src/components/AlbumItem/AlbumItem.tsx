@@ -27,6 +27,7 @@ const AlbumItem = ({
   albumTitle,
   codeId,
   setCodeId
+  
 }: AlbumItemType) => {
   const dispatch = useDispatch()
   const [isHover, setIsHover] = useState<boolean>(false)

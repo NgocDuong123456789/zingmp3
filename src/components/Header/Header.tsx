@@ -299,7 +299,7 @@ const Header = () => {
         <HeadlessTippy
           childrenProps={
             !authentication ? (
-              <Link to={path.register}>
+              <Link to={path.home}>
                 <div className='bg-[#34224F] rounded-lg w-[350px] h-[70px] flex items-center justify-center'>
                   <Button className='text-[white] bg-[rgb(139,69,202)] h-[40px] w-[80%] rounded-full font-bold'>
                     Đăng Nhập
@@ -308,7 +308,7 @@ const Header = () => {
               </Link>
             ) : (
               <div>
-                <Link to={path.register}>
+                <Link to={path.home}>
                   <div className='w-[250px] bg-[#34224F] text-[white] rounded-lg font- text-[15px]'>
                     <div className='flex items-center gap-3 px-4  py-3 border-b-2 border-[#221A2D]'>
                       <img src={profile?.image} alt='avatar' className='w-[50px] h-[50px] object-cover' />

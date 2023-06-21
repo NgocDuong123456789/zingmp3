@@ -16,11 +16,7 @@ export const counterSlice = createSlice({
   reducers: {
     musicId: (state, action: PayloadAction<string | null>) => {
       state.id = action.payload
-    },
-
-    // playMusic: (state, action: PayloadAction<boolean>) => {
-    //   state.play = action.payload
-    // }
+    }
   }
 })
 
