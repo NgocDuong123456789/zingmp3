@@ -166,11 +166,14 @@ export const Player = () => {
         </div>
       ) : (
         <div className='flex items-center gap-4 col-span-2'>
-          <img src={dataSong?.thumbnail} alt='avatar sing' className='w-[50px] h-[50px] rounded-sm' />
-          <div>
-            <h3 className='font-bold line-clamp-1'>{dataSong?.title}</h3>
-            <p className='text-[rgb(136,132,140)]'>{dataSong?.artistsNames}</p>
-          </div>
+          {
+            dataSong ? (<> <img src={dataSong?.thumbnail} alt='avatar sing' className='w-[50px] h-[50px] rounded-sm' /> 
+            <div>
+              <h3 className='font-bold line-clamp-1'>{dataSong?.title}</h3>
+              <p className='text-[rgb(136,132,140)]'>{dataSong?.artistsNames}</p>
+            </div></>) :(<img src="https://tse4.mm.bing.net/th?id=OIP.7vqgHbmwTnBcGyPiTz4h7QAAAA&pid=Api&P=0&h=180" alt='avatar sing' className='w-[50px] h-[50px] rounded-sm' />)
+          }
+          
           <svg
             xmlns='http://www.w3.org/2000/svg'
             fill='none'
