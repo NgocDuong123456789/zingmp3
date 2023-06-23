@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { useAppDispatch, RootState } from '~/redux/store'
-import { detailplaylist, fetchHome, playAlbum, playMusic } from '../../redux/SliceHome'
+import { detailplaylist, playAlbum, playMusic } from '../../redux/SliceHome'
 import { musicId } from '~/redux/SliceMusic'
 
 
@@ -30,7 +30,6 @@ export const Banner = () => {
   let max = 2
   useEffect(() => {
     const imageSlice = document.getElementsByClassName('image-slice')
-
     const interval = setInterval(() => {
       for (let i = 0; i < imageSlice.length; i++) {
         if (i >= min && i <= max) {
@@ -51,7 +50,7 @@ export const Banner = () => {
   }, [])
 
   const handleClickBanner = (item: banner) => {
-    console.log(item)
+   
     if (item.type === 1) {
       dis(musicId(item.encodeId))
       dis(playMusic(true))
@@ -79,36 +78,7 @@ export const Banner = () => {
           onClick={() => handleClickBanner(item)}
         />
       ))}
-      <div>
-        <div className='absolute top-[50%] translate-y-[-50%] left-[10px] w-[50px] h-[50px] bg-[#393142] rounded-full flex items-center justify-center cursor-pointer'>
-          <svg
-           
-            xmlns='http://www.w3.org/2000/svg'
-            fill='none'
-            viewBox='0 0 24 24'
-            strokeWidth={1.5}
-            stroke='currentColor'
-            className='w-6 h-6'
-          >
-            <path strokeLinecap='round' strokeLinejoin='round' d='M15.75 19.5L8.25 12l7.5-7.5' />
-          </svg>
-        </div>
-        <div className='absolute top-[50%] translate-y-[-50%] right-[10px] w-[50px] h-[50px] bg-[#393142] rounded-full flex items-center justify-center cursor-pointer'>
-          <svg
-          
-            xmlns='http://www.w3.org/2000/svg'
-            fill='none'
-            viewBox='0 0 24 24'
-            strokeWidth={1.5}
-            stroke='currentColor'
-            className='w-7 h-7 '
-          >
-            <path strokeLinecap='round' strokeLinejoin='round' d='M8.25 4.5l7.5 7.5-7.5 7.5' />
-          </svg>
-        </div>
-      </div>
+     
     </div>
-   
-   
   )
 }

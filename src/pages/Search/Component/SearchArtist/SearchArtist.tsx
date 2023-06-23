@@ -2,27 +2,18 @@
 import { useSelector } from 'react-redux'
 
 import ArtisItem from '~/components/ArtisItem/ArtisItem'
-import { Skeleton } from '~/components/Skeleton/Skeleton'
+
 import { Icons } from '~/helper/icons'
 import { convertLike } from '~/helper/utils'
 import { RootState } from '~/redux/store'
 
 export const SearchArtist = () => {
   const artis = useSelector((state: RootState) => state.home?.searchAll?.artists)
-  const isLoading = useSelector((state: RootState) => state.home?.isLoading)
+
 
   return (
     <div>
-      {isLoading ? (
-        <div className='px-4 mt-[50px]  w-full items-center grid grid-cols-3 gap-4'>
-          <Skeleton />
-          <Skeleton />
-          <Skeleton />
-          <Skeleton />
-          <Skeleton />
-          <Skeleton />
-        </div>
-      ) : (
+    
         <div className='pb-[150px] px-[1.75rem] bg-[#170F23] text-[white]'>
           <h2 className='text-[18px] font-bold py-4'>Nghệ Sĩ/OA</h2>
           {artis?.length > 0 ? (
@@ -50,7 +41,7 @@ export const SearchArtist = () => {
             </div>
           )}
         </div>
-      )}
+     
     </div>
   )
 }

@@ -7,19 +7,20 @@ import { Icons } from '~/helper/icons'
 import { RootState } from '~/redux/store'
 import { convertLike, convertNumberToTime, convertToDate } from '~/helper/utils'
 import { songProp } from '~/types/song.types'
-import { musicId } from '~/redux/SliceMusic'
 import { playMusic } from '~/redux/SliceHome'
 import AlbumItem from '~/components/AlbumItem/AlbumItem'
 import { Skeleton } from '~/components/Skeleton/Skeleton'
 
 export const Abum = () => {
-  //   const location = useLocation()
+
   const dispatch = useDispatch()
   const [codeId, setCodeId] = useState<string>('')
    const play = useSelector((state: RootState) => state?.home?.play)
   const playList = useSelector((state: RootState) => state?.home?.detailplaylist?.data
   )
   const isLoadingDetailplaylist = useSelector((state: RootState) => state?.home.isLoadingDetailplaylist)
+  const isLoadingHome = useSelector((state: RootState) => state?.home.isLoadingHome)
+  console.log(isLoadingHome)
   
   const renderThumb = () => {
     const thumbStyle = {
@@ -31,7 +32,7 @@ export const Abum = () => {
   }
   return (
     <div>
-      { isLoadingDetailplaylist? (
+      { isLoadingDetailplaylist || isLoadingHome ? (
         <div className='px-4 mt-[100px]  w-full items-center grid grid-cols-3 gap-4'>
           <Skeleton />
           <Skeleton />

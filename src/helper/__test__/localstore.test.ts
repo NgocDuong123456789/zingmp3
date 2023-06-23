@@ -1,5 +1,5 @@
 import { describe, it, expect ,beforeEach} from 'vitest'
-import { saveAccessToken, getAccessToken, getProfile, saveProfile, RemoveLocal } from '../localstore'
+import { saveAccessToken, getAccessToken, RemoveLocal } from '../localstore'
 
 
 

@@ -1,10 +1,10 @@
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useState } from 'react'
 
 import { Icons } from '~/helper/icons'
 import { playMusic } from '~/redux/SliceHome'
 import { musicId } from '~/redux/SliceMusic'
-import { RootState } from '~/redux/store'
+
 interface TypeProp {
   title: string
   artistsNames: string
@@ -15,7 +15,7 @@ interface TypeProp {
 const OutSandSong = ({ title, artistsNames, thumbnail, encodeId }: TypeProp) => {
   const dispatch = useDispatch()
   const [isHover, setIsHover] = useState(false)
-  const play = useSelector((state: RootState) => state.home.play)
+  
   const handleMouseEnter = () => {
     setIsHover(true)
   }

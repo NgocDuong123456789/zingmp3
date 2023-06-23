@@ -17,7 +17,7 @@ const Header = () => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const dis = useDispatch()
-  const inputRef=useRef<HTMLInputElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
   const [isInputFocused, setIsInputFocused] = useState(false)
   const { authentication, profile } = useContext(AppContext)
   const [searchSongItem, setSearchSong] = useState<string>('')
@@ -37,19 +37,17 @@ const Header = () => {
         search: createSearchParams({
           q: searchSongItem
         }).toString()
-
       })
-      if(inputRef.current){
+      if (inputRef.current) {
         inputRef.current.blur()
       }
-      
     }
   }
 
   const handleFocus = () => {
     setIsInputFocused(true)
   }
-  const handleBlur = (e: any) => {
+  const handleBlur = () => {
     setIsInputFocused(false)
   }
 
@@ -99,7 +97,6 @@ const Header = () => {
               onKeyUp={handleSearchSong}
               onFocus={handleFocus}
               value={searchSongItem}
-             
             />
 
             <Icons.BsSearch

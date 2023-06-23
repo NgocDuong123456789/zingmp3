@@ -1,7 +1,6 @@
 import { useSelector } from 'react-redux'
 
 import MVItem from '~/components/MVItem/MVItem'
-import { Skeleton } from '~/components/Skeleton/Skeleton'
 import { RootState } from '~/redux/store'
 
 export const SearchMV = () => {

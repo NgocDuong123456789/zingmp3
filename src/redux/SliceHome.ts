@@ -1,13 +1,10 @@
-import { AsyncThunk, PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import {  PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import https from '../apis/https'
 import { playList } from '~/types/playList.types'
 import { songProp } from '~/types/song.types'
 
-type GenericAsyncThunk = AsyncThunk<unknown, unknown, any>
-type PendingAction = ReturnType<GenericAsyncThunk['pending']>
-type RejectedAction = ReturnType<GenericAsyncThunk['rejected']>
-type FulfilledAction = ReturnType<GenericAsyncThunk['fulfilled']>
+
 interface song {
   err: number
   msg?: string
@@ -299,7 +296,7 @@ export const homeSlice = createSlice({
       .addCase(fetchHome.fulfilled, (state, action) => {
         if (action.payload !== undefined) {
           state.banner = action?.payload?.data?.items?.find((item: any) => item?.sectionId === 'hSlider')?.items
-           state.friday = action?.payload?.data?.items?.find((item: any) => item?.sectionId === 'hArtistTheme')
+          state.friday = action?.payload?.data?.items?.find((item: any) => item?.sectionId === 'hArtistTheme')
            state.newEveryMusic = action?.payload?.data?.items?.find((item: any) => item?.sectionId === 'hEditorTheme2')
            state.top100 = action?.payload?.data?.items?.find((item: any) => item?.sectionId === 'h100')
            state.alBumHot = action?.payload?.data?.items?.find((item: any) => item?.sectionId === 'hAlbum')
@@ -355,10 +352,6 @@ export const homeSlice = createSlice({
       .addCase(artists.rejected, (state) => {
         state.isLoadingArtists =false
       })
-
-
-
-
     // .addMatcher<FulfilledAction>(
     //   (action) => action.type.endsWith('/pending'),
     //   (state, action) => {

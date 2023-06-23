@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 
 import { Icons } from '~/helper/icons'
+
 interface MVType {
   encodeId: string
   title: string
@@ -9,7 +10,7 @@ interface MVType {
   artistsNames: string
   thumbnailM: string
 }
-const MVItem = ({ encodeId, title, thumbnail, link, artistsNames, thumbnailM }: MVType) => {
+const MVItem = ({  title, thumbnail, artistsNames, thumbnailM }: MVType) => {
   const [isHover, setIsHover] = useState<boolean>(false)
   const imageRef = useRef<HTMLImageElement>(null)
   const handleMouseEnter = () => {

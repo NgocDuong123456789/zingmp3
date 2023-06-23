@@ -1,5 +1,5 @@
 import Tippy from '@tippyjs/react/headless'
-import { ReactNode, useState } from 'react'
+import { ReactNode } from 'react'
 
 interface Props {
   children: ReactNode

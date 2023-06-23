@@ -2,12 +2,12 @@ import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 interface musicIdProp {
    id: null | string
-  // play: boolean
+ 
 }
 
 const initialState: musicIdProp = {
   id: null,
-  // play: false
+  
 }
 
  const counterSlice = createSlice({
