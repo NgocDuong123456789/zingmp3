@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from 'react-redux'
 import classNames from 'classnames'
 import { toast } from 'react-toastify'
 
-
 import { fetchInfoSong, fetchSong, playMusic } from '../../redux/SliceHome'
 import { RootState, useAppDispatch } from '~/redux/store'
 import { covertTime } from '~/helper/utils'
@@ -24,7 +23,7 @@ export const Player = () => {
   const isLoadingSong = useSelector((state: RootState) => state.home?.isLoadingSong)
 
   const id = music.id as string
-  
+
   const play = home.play
 
   const playAlbum = home.alBum
@@ -166,14 +165,23 @@ export const Player = () => {
         </div>
       ) : (
         <div className='flex items-center gap-4 col-span-2'>
-          {
-            dataSong ? (<> <img src={dataSong?.thumbnail} alt='avatar sing' className='w-[50px] h-[50px] rounded-sm' /> 
-            <div>
-              <h3 className='font-bold line-clamp-1'>{dataSong?.title}</h3>
-              <p className='text-[rgb(136,132,140)]'>{dataSong?.artistsNames}</p>
-            </div></>) :(<img src="https://tse4.mm.bing.net/th?id=OIP.7vqgHbmwTnBcGyPiTz4h7QAAAA&pid=Api&P=0&h=180" alt='avatar sing' className='w-[50px] h-[50px] rounded-sm' />)
-          }
-          
+          {dataSong ? (
+            <>
+              {' '}
+              <img src={dataSong?.thumbnail} alt='avatar sing' className='w-[50px] h-[50px] rounded-sm' />
+              <div>
+                <h3 className='font-bold line-clamp-1'>{dataSong?.title}</h3>
+                <p className='text-[rgb(136,132,140)]'>{dataSong?.artistsNames}</p>
+              </div>
+            </>
+          ) : (
+            <img
+              src='https://tse4.mm.bing.net/th?id=OIP.7vqgHbmwTnBcGyPiTz4h7QAAAA&pid=Api&P=0&h=180'
+              alt='avatar sing'
+              className='w-[50px] h-[50px] rounded-sm'
+            />
+          )}
+
           <svg
             xmlns='http://www.w3.org/2000/svg'
             fill='none'

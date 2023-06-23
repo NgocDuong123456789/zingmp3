@@ -107,7 +107,8 @@ const Header = () => {
           {isInputFocused && searchSongItem !== '' && (
             <div className='text-[white] absolute top-[67px] bg-[#34224F]  w-[350px] flex flex-col rounded-b-xl mt-[-10px] z-20'>
               <h3 className='font-bold text-[15px] mx-3 mt-2 mb-3'>Tìm kiếm gần đây</h3>
-              {dataSearchHistory?.searchHistory?.length > 0 &&
+              {
+              dataSearchHistory?.searchHistory?.length > 0 ? 
                 dataSearchHistory?.searchHistory?.slice(-10).map((itemSearch: string, index: number) => {
                   return (
                     <div key={index}>
@@ -132,7 +133,8 @@ const Header = () => {
                       </div>
                     </div>
                   )
-                })}
+                }) : (<p className='font-bold text-[15px] mx-3 mt-2 mb-3'>Chưa có tìm kiếm nào !</p>)
+                }
             </div>
           )}
         </div>
