@@ -4,12 +4,12 @@ import { MdPlayArrow } from 'react-icons/md'
 import {AiOutlineHeart} from 'react-icons/ai'
 import { ImVolumeMedium } from 'react-icons/im'
 import {GiLevelThreeAdvanced} from 'react-icons/gi'
-import {BiMusic} from 'react-icons/bi'
+import {BiMusic,BiTrendingUp} from 'react-icons/bi'
 import {FaRandom} from 'react-icons/fa'
 import {GiLoveSong} from 'react-icons/gi'
 export const Icons = {
   BsSearch,
-  
+  BiTrendingUp,
   CgPlayPause,
   MdPlayArrow,
   AiOutlineHeart,

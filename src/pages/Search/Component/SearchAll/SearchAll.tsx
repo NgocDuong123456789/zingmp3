@@ -14,10 +14,9 @@ const SearchAll = () => {
   const searchSong = useSelector((state: RootState) => state?.home?.searchAll?.songs)
   const playListSong = useSelector((state: RootState) => state?.home?.searchAll?.playlists)
   const mv = useSelector((state: RootState) => state?.home?.searchAll?.videos)
-  const song = useSelector((state: RootState) => state?.home?.searchAll)
-  console.log(song)
   const artis = useSelector((state: RootState) => state?.home?.searchAll?.artists)
   const isLoadingSearch = useSelector((state: RootState) => state?.home?.isLoadingSearch)
+
   return (
     <div>
       {isLoadingSearch ? (
@@ -34,37 +33,55 @@ const SearchAll = () => {
           <div className='pb-[30px]'>
             <h2 className='text-[18px] font-bold py-4'>Nổi Bật</h2>
             <div>
-              <div className='grid grid-cols-3 gap-9'>
-                {searchSong?.slice(0, 3)?.map((item, index) => {
+              {searchSong?.length > 0 ? (
+                <div className='grid grid-cols-3 gap-9'>
+                  {searchSong?.slice(0, 3)?.map((item, index) => {
+                    return (
+                      <OutSandSong
+                        key={index}
+                        encodeId={item.encodeId}
+                        title={item.title}
+                        thumbnail={item.thumbnail}
+                        artistsNames={item.artistsNames}
+                      />
+                    )
+                  })}
+                </div>
+              ) : (
+                <div className='h-[30vh] flex  justify-center items-center m-auto w-full bg-[#2F2739] rounded-lg'>
+                  <div className='w-full flex flex-col items-center'>
+                    <Icons.GiLoveSong size={50} />
+                    <p className='mt-4'>Không có Bài hát nào được tìm thấy</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className='pb-[40px]'>
+            <h2 className='text-[18px] font-bold py-4'>Bài Hát</h2>
+            {searchSong?.length > 0 ? (
+              <div className='grid grid-cols-2 gap-4'>
+                {searchSong?.slice(0, 6)?.map((item, index) => {
                   return (
-                    <OutSandSong
+                    <SongItem
                       key={index}
                       encodeId={item.encodeId}
                       title={item.title}
                       thumbnail={item.thumbnail}
                       artistsNames={item.artistsNames}
+                      time={covertTime(item.duration)}
                     />
                   )
                 })}
               </div>
-            </div>
-          </div>
-          <div className='pb-[40px]'>
-            <h2 className='text-[18px] font-bold py-4'>Bài Hát</h2>
-            <div className='grid grid-cols-2 gap-4'>
-              {searchSong?.slice(0, 6)?.map((item, index) => {
-                return (
-                  <SongItem
-                    key={index}
-                    encodeId={item.encodeId}
-                    title={item.title}
-                    thumbnail={item.thumbnail}
-                    artistsNames={item.artistsNames}
-                    time={covertTime(item.duration)}
-                  />
-                )
-              })}
-            </div>
+            ) : (
+              <div className='h-[30vh] flex  justify-center items-center m-auto w-full bg-[#2F2739] rounded-lg'>
+                <div className='w-full flex flex-col items-center'>
+                  <Icons.GiLoveSong size={50} />
+                  <p className='mt-4'>Không có Bài hát nào được tìm thấy</p>
+                </div>
+              </div>
+            )}
           </div>
           <div className='pb-[40px]'>
             <h2 className='text-[18px] font-bold py-4'>Playlist/Album</h2>
@@ -112,21 +129,30 @@ const SearchAll = () => {
           </div>
           <div className='pb-[150px]'>
             <h2 className='text-[18px] font-bold py-4'>Nghệ Sĩ/OA</h2>
-            <div className='grid grid-cols-5 gap-4'>
-              {artis?.slice(0, 5)?.map((item) => {
-                return (
-                  <ArtisItem
-                    key={item.id}
-                    encodeId={item.id}
-                    thumbnail={item.thumbnail}
-                    link={item.link}
-                    name={item.name}
-                    alias={item.alias}
-                    totalFollow={convertLike(item.totalFollow) as number}
-                  />
-                )
-              })}
-            </div>
+            {artis?.length > 0 ? (
+              <div className='grid grid-cols-5 gap-4'>
+                {artis?.slice(0, 5)?.map((item) => {
+                  return (
+                    <ArtisItem
+                      key={item.id}
+                      encodeId={item.id}
+                      thumbnail={item.thumbnail}
+                      link={item.link}
+                      name={item.name}
+                      alias={item.alias}
+                      totalFollow={convertLike(item.totalFollow) as number}
+                    />
+                  )
+                })}
+              </div>
+            ) : (
+              <div className='h-[30vh] flex  justify-center items-center m-auto w-full bg-[#2F2739] rounded-lg'>
+                <div className='w-full flex flex-col items-center'>
+                  <Icons.GiLoveSong size={50} />
+                  <p className='mt-4'>Không có Nghệ sĩ/OA nào được tìm thấy</p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}

@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import classNames from 'classnames'
 import { toast } from 'react-toastify'
 
+
 import { fetchInfoSong, fetchSong, playMusic } from '../../redux/SliceHome'
 import { RootState, useAppDispatch } from '~/redux/store'
 import { covertTime } from '~/helper/utils'
@@ -18,13 +19,14 @@ export const Player = () => {
   const thumb = useRef<HTMLDivElement>(null)
   const [repeat, setRepeat] = useState<boolean>(false)
   const [VolumeMedium, setVolumeMedium] = useState<number>(30)
-  const music = useSelector((state: RootState) => state.music)
+  const music = useSelector((state: RootState) => state?.music?.musicReducer)
   const home = useSelector((state: RootState) => state.home)
-  const isLoadingSong = useSelector((state: RootState) => state.home.isLoadingSong)
- 
+  const isLoadingSong = useSelector((state: RootState) => state.home?.isLoadingSong)
+
   const id = music.id as string
+  
   const play = home.play
- 
+
   const playAlbum = home.alBum
   const trackRef = useRef<HTMLDivElement>(null)
   const dispatch = useAppDispatch()
@@ -57,25 +59,20 @@ export const Player = () => {
   }, [id])
 
   useEffect(() => {
-    timer && clearInterval(timer as any)
+    timer && clearInterval(timer)
     audio.currentTime = 0
     // audio.load()
     audio.pause()
     if (play) {
       audio?.play()
-      // if (isLoadingSong) {
-      //   dis(playMusic(false))
-      // } else {
-      //   dis(playMusic(true))
-      // }
+
       timer = setInterval(() => {
         setCurrentTime(covertTime(audio.currentTime))
         const percent = Math.round((audio?.currentTime * 10000) / (dataSong?.duration as number)) / 100
         ;(thumb?.current as HTMLDivElement).style.cssText = `right:${100 - percent}%`
       }, 1000)
     }
-  }, [audio, play, isLoadingSong])
-  //  console.log(play)
+  }, [audio, play])
 
   const playMusics = () => {
     if (play) {
@@ -237,15 +234,15 @@ export const Player = () => {
             onClick={playMusics}
             aria-hidden='true'
           >
-            
-            {
-              isLoadingSong ? (  
-                <>
-                  <AudioLoader />
-                 {/* {dis(playMusic(false))}  */}
-                </>
-              )
-              : (play ? <Icons.CgPlayPause size={25} /> : <Icons.MdPlayArrow size={25} />
+            {isLoadingSong ? (
+              <>
+                <AudioLoader />
+                {/* {dis(playMusic(false))}  */}
+              </>
+            ) : play ? (
+              <Icons.CgPlayPause size={25} />
+            ) : (
+              <Icons.MdPlayArrow size={25} />
             )}
           </div>
           <svg
@@ -288,7 +285,9 @@ export const Player = () => {
               <div className='absolute top-0 left-0 bottom-0 bg-[red]  rounded-md  cursor-pointer' ref={thumb}></div>
             </div>
           </div>
-         <span className='text-[14px] font-bold'>{covertTime(dataSong?.duration as number)}</span>
+          <span className='text-[14px] font-bold'>
+            {dataSong?.duration ? covertTime(dataSong?.duration as number) : '00:00'}
+          </span>
         </div>
       </div>
       <div className='flex items-center justify-end gap-5 cursor-pointer col-span-2'>

@@ -10,7 +10,7 @@ const initialState: musicIdProp = {
   // play: false
 }
 
-export const counterSlice = createSlice({
+ const counterSlice = createSlice({
   name: 'musicId',
   initialState,
   reducers: {
@@ -20,6 +20,6 @@ export const counterSlice = createSlice({
   }
 })
 
-export const { musicId} = counterSlice.actions
+export const { musicId } = counterSlice.actions
 
 export default counterSlice.reducer

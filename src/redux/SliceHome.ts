@@ -333,7 +333,7 @@ export const homeSlice = createSlice({
       .addCase(fetchSong.rejected, (state) => {
         state.isLoadingSong = false
       })
-      .addCase(searchSong.pending, (state, action) => {
+      .addCase(searchSong.pending, (state) => {
         state.isLoadingSearch = true
       })
       .addCase(searchSong.fulfilled, (state, action) => {

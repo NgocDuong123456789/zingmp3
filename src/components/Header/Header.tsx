@@ -1,6 +1,9 @@
-import { useContext, useState } from 'react'
+import { useContext, useState, useRef } from 'react'
 import { Link, useNavigate, createSearchParams } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import debounce from 'lodash/debounce'
 
+import { searchHistory } from '../../redux/SliceSearchHistory'
 import { HeadlessTippy } from '../Tippy/Tippy'
 import { Icons } from '../../helper/icons'
 import { path } from '../../contains/path'
@@ -8,26 +11,48 @@ import { AppContext } from '~/useContext/Context'
 import { GenerateSideBar } from '../GenerateSideBar/GenerateSideBar'
 import { Button } from '../Button/Button'
 import { searchSong } from '../../redux/SliceHome'
-import { useAppDispatch } from '~/redux/store'
-
+import { RootState, useAppDispatch } from '~/redux/store'
 
 const Header = () => {
   const navigate = useNavigate()
-
   const dispatch = useAppDispatch()
+  const dis = useDispatch()
+  const inputRef=useRef<HTMLInputElement>(null)
+  const [isInputFocused, setIsInputFocused] = useState(false)
   const { authentication, profile } = useContext(AppContext)
   const [searchSongItem, setSearchSong] = useState<string>('')
+  const dataSearchHistory = useSelector((state: RootState) => state?.music.searchHistory)
+  console.log(dataSearchHistory)
+  const debouncedSearch = debounce((query) => {
+    console.log(`Searching for: ${query}`)
+  }, 500)
+
   const handleSearchSong = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.keyCode === 13) {
       dispatch(searchSong({ keyword: searchSongItem }))
+      dis(searchHistory(searchSongItem))
+      setIsInputFocused(false)
       navigate({
         pathname: `${path.searchSong}/${path.All}`,
         search: createSearchParams({
           q: searchSongItem
         }).toString()
+
       })
+      if(inputRef.current){
+        inputRef.current.blur()
+      }
+      
     }
   }
+
+  const handleFocus = () => {
+    setIsInputFocused(true)
+  }
+  const handleBlur = (e: any) => {
+    setIsInputFocused(false)
+  }
+
   return (
     <header className='h-[75px] flex items-center justify-between bg-[#1F182B] text-[white] px-7 w-[83.33333%]  top-0 fixed z-20 '>
       <div className='flex items-center cursor-pointer'>
@@ -57,16 +82,62 @@ const Header = () => {
             </svg>
           </button>
         </div>
-        <div className='relative'>
-          <input
-            type='text'
-            placeholder='Tìm kiếm bài hát, nghệ sĩ,lời bài hát...'
-            className='h-[40px] w-[350px] rounded-full pl-8  bg-[#423C4B] outline-none'
-            onChange={(e) => setSearchSong(e.target.value)}
-            onKeyUp={handleSearchSong}
-          />
 
-          <Icons.BsSearch className='w-5 h-5 absolute left-[7px] top-[50%] text-[black] translate-y-[-50%] fill-[white] ' />
+        <div onBlur={handleBlur}>
+          <div className='relative'>
+            <input
+              type='text'
+              ref={inputRef}
+              placeholder='Tìm kiếm bài hát, nghệ sĩ,lời bài hát...'
+              className={`h-[40px] w-[350px] rounded-full pl-8  ${
+                isInputFocused && searchSongItem !== '' ? ' bg-[#34224F] rounded-b-none rounded-t-2xl ' : 'bg-[#423C4B]'
+              } outline-none`}
+              onChange={(e) => {
+                setSearchSong(e.target.value)
+                debouncedSearch(e.target.value)
+              }}
+              onKeyUp={handleSearchSong}
+              onFocus={handleFocus}
+              value={searchSongItem}
+             
+            />
+
+            <Icons.BsSearch
+              size={18}
+              className=' absolute left-[7px] top-[50%] text-[black] translate-y-[-50%] fill-[white] '
+            />
+          </div>
+          {isInputFocused && searchSongItem !== '' && (
+            <div className='text-[white] absolute top-[67px] bg-[#34224F]  w-[350px] flex flex-col rounded-b-xl mt-[-10px] z-20'>
+              <h3 className='font-bold text-[15px] mx-3 mt-2 mb-3'>Tìm kiếm gần đây</h3>
+              {dataSearchHistory?.searchHistory?.length > 0 &&
+                dataSearchHistory?.searchHistory?.slice(-10).map((itemSearch: string, index: number) => {
+                  return (
+                    <div key={index}>
+                      <div
+                        className='flex items-center gap-3 pl-3 cursor-pointer hover:bg-[#170F23] '
+                        aria-hidden='true'
+                        onMouseDown={(e) => {
+                          e.stopPropagation()
+                          dispatch(searchSong({ keyword: itemSearch }))
+                          navigate({
+                            pathname: `${path.searchSong}/${path.All}`,
+                            search: createSearchParams({
+                              q: itemSearch
+                            }).toString()
+                          })
+                          setSearchSong(itemSearch)
+                          // setSearchSong('')
+                        }}
+                      >
+                        <Icons.BiTrendingUp size={20} />
+                        <span className='py-2'>{itemSearch}</span>
+                      </div>
+                    </div>
+                  )
+                })}
+            </div>
+          )}
         </div>
       </div>
       <div className='flex items-center cursor-pointer'>
@@ -407,5 +478,4 @@ const Header = () => {
     </header>
   )
 }
-
 export default Header
