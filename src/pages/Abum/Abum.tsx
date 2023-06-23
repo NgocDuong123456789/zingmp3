@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { useEffect, useState } from 'react'
+import {  useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 
 import AudioLoading from '../../components/AudioLoading/AudioLoading'
@@ -16,12 +16,11 @@ export const Abum = () => {
   //   const location = useLocation()
   const dispatch = useDispatch()
   const [codeId, setCodeId] = useState<string>('')
-  const homeList = useSelector((state: RootState) => state?.home)
-  const playList = homeList?.detailplaylist?.data
-  const isLoading = useSelector((state: RootState) => state?.home.isLoading)
-  console.log(isLoading)
-  const play = homeList?.play
-
+   const play = useSelector((state: RootState) => state?.home?.play)
+  const playList = useSelector((state: RootState) => state?.home?.detailplaylist?.data
+  )
+  const isLoadingDetailplaylist = useSelector((state: RootState) => state?.home.isLoadingDetailplaylist)
+  
   const renderThumb = () => {
     const thumbStyle = {
       backgroundColor: '#4A4250',
@@ -32,7 +31,7 @@ export const Abum = () => {
   }
   return (
     <div>
-      {isLoading ? (
+      { isLoadingDetailplaylist? (
         <div className='px-4 mt-[100px]  w-full items-center grid grid-cols-3 gap-4'>
           <Skeleton />
           <Skeleton />

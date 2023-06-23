@@ -1,9 +1,10 @@
 import { Link, useLocation } from 'react-router-dom'
+import classnames from 'classnames'
+
 import logomp3 from '../../assets/imgs/logo-zingmp3.png'
 import { path } from '../../contains/path'
-import classnames from 'classnames'
 import { GenerateSideBar } from '../GenerateSideBar/GenerateSideBar'
-import { Button } from '../Button/Button'
+
 const Sidebar = () => {
   const location = useLocation()
 

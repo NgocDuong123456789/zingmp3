@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+
 import { Icons } from '~/helper/icons'
 import { covertTime } from '~/helper/utils'
 import { playAlbum, playMusic } from '~/redux/SliceHome'
@@ -39,6 +40,8 @@ const AlbumItem = ({
   const handleMouseLeave = () => {
     setIsHover(false)
   }
+  const isLoadingSong = useSelector((state: RootState) => state.home.isLoadingSong)
+
   const play = useSelector((state: RootState) => state.home.play)
   return (
     <div
@@ -82,7 +85,8 @@ const AlbumItem = ({
                   e.stopPropagation()
                   setCodeId(encodeId)
                   dispatch(musicId(encodeId))
-                  dispatch(playMusic(true))
+                  isLoadingSong ? dispatch(playMusic(false)) : dispatch(playMusic(true))
+                  // dispatch(playMusic(true))
                   dispatch(playAlbum(true))
                 }}
               >

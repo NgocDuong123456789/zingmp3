@@ -2,12 +2,15 @@ import { Icons } from '../../helper/icons'
 import { useState, useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import classNames from 'classnames'
+import { toast } from 'react-toastify'
 
 import { fetchInfoSong, fetchSong, playMusic } from '../../redux/SliceHome'
 import { RootState, useAppDispatch } from '~/redux/store'
 import { covertTime } from '~/helper/utils'
 import { songProp } from '../../types/song.types'
 import { musicId } from '~/redux/SliceMusic'
+import { AudioLoader } from '../AudioLoading/AudioLoading'
+
 let timer: any
 
 export const Player = () => {
@@ -17,8 +20,11 @@ export const Player = () => {
   const [VolumeMedium, setVolumeMedium] = useState<number>(30)
   const music = useSelector((state: RootState) => state.music)
   const home = useSelector((state: RootState) => state.home)
+  const isLoadingSong = useSelector((state: RootState) => state.home.isLoadingSong)
+ 
   const id = music.id as string
   const play = home.play
+ 
   const playAlbum = home.alBum
   const trackRef = useRef<HTMLDivElement>(null)
   const dispatch = useAppDispatch()
@@ -45,6 +51,7 @@ export const Player = () => {
         } else {
           setAudio(new Audio())
           dis(playMusic(false))
+          toast.warn('Bài hát chỉ dành cho VIP !')
         }
       })
   }, [id])
@@ -52,17 +59,23 @@ export const Player = () => {
   useEffect(() => {
     timer && clearInterval(timer as any)
     audio.currentTime = 0
-    audio.load()
+    // audio.load()
     audio.pause()
     if (play) {
       audio?.play()
+      // if (isLoadingSong) {
+      //   dis(playMusic(false))
+      // } else {
+      //   dis(playMusic(true))
+      // }
       timer = setInterval(() => {
         setCurrentTime(covertTime(audio.currentTime))
         const percent = Math.round((audio?.currentTime * 10000) / (dataSong?.duration as number)) / 100
         ;(thumb?.current as HTMLDivElement).style.cssText = `right:${100 - percent}%`
       }, 1000)
     }
-  }, [audio ,play])
+  }, [audio, play, isLoadingSong])
+  //  console.log(play)
 
   const playMusics = () => {
     if (play) {
@@ -133,41 +146,65 @@ export const Player = () => {
 
   return (
     <div className=' items-center grid grid-cols-7  bg-[rgb(19,12,28)] w-full h-[90px] text-[white] px-[1.75rem]  z-50 fixed bottom-0 '>
-      <div className='flex items-center gap-4 col-span-2'>
-        <img src={dataSong?.thumbnail} alt='avatar sing' className='w-[60px] h-[60px] rounded-sm' />
-        <div>
-          <h3 className='font-bold line-clamp-1'>{dataSong?.title}</h3>
-          <p className='text-[rgb(136,132,140)]'>{dataSong?.artistsNames}</p>
+      {isLoadingSong ? (
+        <div
+          role='status'
+          className=' flex items-center gap-4 col-span-2 space-y-8 animate-pulse md:space-y-0 md:space-x-8 md:flex md:items-center'
+        >
+          <div className='flex items-center justify-center w-full  bg-gray-300 rounded  dark:bg-gray-700'>
+            <svg
+              className='w-4 h-10 text-gray-200'
+              xmlns='http://www.w3.org/2000/svg'
+              aria-hidden='true'
+              fill='currentColor'
+              viewBox='0 0 640 512'
+            >
+              <path d='M480 80C480 35.82 515.8 0 560 0C604.2 0 640 35.82 640 80C640 124.2 604.2 160 560 160C515.8 160 480 124.2 480 80zM0 456.1C0 445.6 2.964 435.3 8.551 426.4L225.3 81.01C231.9 70.42 243.5 64 256 64C268.5 64 280.1 70.42 286.8 81.01L412.7 281.7L460.9 202.7C464.1 196.1 472.2 192 480 192C487.8 192 495 196.1 499.1 202.7L631.1 419.1C636.9 428.6 640 439.7 640 450.9C640 484.6 612.6 512 578.9 512H55.91C25.03 512 .0006 486.1 .0006 456.1L0 456.1z' />
+            </svg>
+          </div>
+          <div className='w-full'>
+            <div className='h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[460px] mb-2.5'></div>
+            <div className='h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px]'></div>
+          </div>
         </div>
-        <svg
-          xmlns='http://www.w3.org/2000/svg'
-          fill='none'
-          viewBox='0 0 24 24'
-          strokeWidth={1.5}
-          stroke='currentColor'
-          className='w-6 h-6 cursor-pointer'
-        >
-          <path
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            d='M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z'
-          />
-        </svg>
-        <svg
-          xmlns='http://www.w3.org/2000/svg'
-          fill='none'
-          viewBox='0 0 24 24'
-          strokeWidth={1.5}
-          stroke='currentColor'
-          className='w-6 h-6 cursor-pointer'
-        >
-          <path
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            d='M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z'
-          />
-        </svg>
-      </div>
+      ) : (
+        <div className='flex items-center gap-4 col-span-2'>
+          <img src={dataSong?.thumbnail} alt='avatar sing' className='w-[50px] h-[50px] rounded-sm' />
+          <div>
+            <h3 className='font-bold line-clamp-1'>{dataSong?.title}</h3>
+            <p className='text-[rgb(136,132,140)]'>{dataSong?.artistsNames}</p>
+          </div>
+          <svg
+            xmlns='http://www.w3.org/2000/svg'
+            fill='none'
+            viewBox='0 0 24 24'
+            strokeWidth={1.5}
+            stroke='currentColor'
+            className='w-6 h-6 cursor-pointer'
+          >
+            <path
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              d='M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z'
+            />
+          </svg>
+          <svg
+            xmlns='http://www.w3.org/2000/svg'
+            fill='none'
+            viewBox='0 0 24 24'
+            strokeWidth={1.5}
+            stroke='currentColor'
+            className='w-6 h-6 cursor-pointer'
+          >
+            <path
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              d='M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z'
+            />
+          </svg>
+        </div>
+      )}
+
       <div className='flex flex-col justify-center w-full m-auto   items-center col-span-3'>
         <div className='flex items-center gap-10 cursor-pointer '>
           <Icons.FaRandom
@@ -200,7 +237,16 @@ export const Player = () => {
             onClick={playMusics}
             aria-hidden='true'
           >
-            {play ? <Icons.CgPlayPause size={25} /> : <Icons.MdPlayArrow size={25} />}
+            
+            {
+              isLoadingSong ? (  
+                <>
+                  <AudioLoader />
+                 {/* {dis(playMusic(false))}  */}
+                </>
+              )
+              : (play ? <Icons.CgPlayPause size={25} /> : <Icons.MdPlayArrow size={25} />
+            )}
           </div>
           <svg
             xmlns='http://www.w3.org/2000/svg'
@@ -242,7 +288,7 @@ export const Player = () => {
               <div className='absolute top-0 left-0 bottom-0 bg-[red]  rounded-md  cursor-pointer' ref={thumb}></div>
             </div>
           </div>
-          <span className='text-[14px] font-bold'>{covertTime(dataSong?.duration as number)}</span>
+         <span className='text-[14px] font-bold'>{covertTime(dataSong?.duration as number)}</span>
         </div>
       </div>
       <div className='flex items-center justify-end gap-5 cursor-pointer col-span-2'>

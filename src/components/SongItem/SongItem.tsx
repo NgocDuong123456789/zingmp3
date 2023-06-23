@@ -1,6 +1,8 @@
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+
 import { playMusic } from '~/redux/SliceHome'
 import { musicId } from '~/redux/SliceMusic'
+import { RootState } from '~/redux/store'
 interface SongItemType {
   title: string
   thumbnail: string
@@ -8,8 +10,11 @@ interface SongItemType {
   artistsNames: string
   time?: string
 }
+
 export const SongItem = ({ title, thumbnail, artistsNames, encodeId, time }: SongItemType) => {
   const dispatch = useDispatch()
+  const isLoadingSong = useSelector((state: RootState) => state.home.isLoadingSong)
+
   return (
     <div className='w-full col-span-1 flex items-center mb-5 justify-between cursor-pointer hover:bg-[#2F2739] hover:rounded-lg hover:z-10 pr-5'>
       <div className='flex items-center gap-3'>
@@ -19,7 +24,8 @@ export const SongItem = ({ title, thumbnail, artistsNames, encodeId, time }: Son
           className='w-[70px] h-[70px] rounded-sm'
           aria-hidden='true'
           onClick={() => {
-            dispatch(playMusic(true))
+
+           isLoadingSong ? dispatch(playMusic(false)) : dispatch(playMusic(true))
             dispatch(musicId(encodeId))
           }}
         />

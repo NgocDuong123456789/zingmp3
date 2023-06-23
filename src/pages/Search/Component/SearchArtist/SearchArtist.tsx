@@ -1,5 +1,6 @@
-import React from 'react'
+
 import { useSelector } from 'react-redux'
+
 import ArtisItem from '~/components/ArtisItem/ArtisItem'
 import { Skeleton } from '~/components/Skeleton/Skeleton'
 import { Icons } from '~/helper/icons'

@@ -1,4 +1,5 @@
 import { AsyncThunk, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+
 import https from '../apis/https'
 import { userProp } from '~/types/user.types'
 import { GenerateType } from '~/types/Generate.types'

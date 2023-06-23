@@ -1,52 +1,48 @@
+import { useState, useRef } from 'react'
+import { createSearchParams, useNavigate } from 'react-router-dom'
+
 import { Icons } from '~/helper/icons'
 import { Button } from '../Button/Button'
-import { useAppDispatch } from "~/redux/store"
-import { useState, useEffect, useRef } from 'react'
-import { createSearchParams, useNavigate } from 'react-router-dom'
+import { useAppDispatch } from '~/redux/store'
 import { artists } from '~/redux/SliceHome'
 interface ArtisType {
   encodeId: string
   thumbnail: string
   link: string
   name: string
-  totalFollow: number,
+  totalFollow: number
   alias: string
 }
-const ArtisItem = ({ thumbnail, name, totalFollow ,link,alias
-}: ArtisType) => {
-  const navigate= useNavigate()
-  const dispatch=useAppDispatch()
+const ArtisItem = ({ thumbnail, name, totalFollow,  alias }: ArtisType) => {
+  const navigate = useNavigate()
+  const dispatch = useAppDispatch()
   const [isShow, setIsShow] = useState<boolean>(false)
   const imageRef = useRef<HTMLImageElement>(null)
   const handleMouseEnter = () => {
     setIsShow(true)
-  
-      imageRef?.current?.classList.add('animate-scale-up-image')
-    
-    
+
+    imageRef?.current?.classList.add('animate-scale-up-image')
   }
   const handleMouseLeave = () => {
     setIsShow(false)
-      imageRef?.current?.classList.remove('animate-scale-up-image')
-   
+    imageRef?.current?.classList.remove('animate-scale-up-image')
   }
 
   return (
     <div
       className='w-full h-full col-span-1 flex flex-col items-center justify-center my-4 cursor-pointer '
       onMouseEnter={handleMouseEnter}
-      aria-hidden="true"
+      aria-hidden='true'
       onMouseLeave={handleMouseLeave}
-       onClick={()=>{
+      onClick={() => {
         navigate({
-          pathname:'/nghe-si',
-          search:createSearchParams({
-            name:name
+          pathname: '/nghe-si',
+          search: createSearchParams({
+            name: name
           }).toString()
         })
-        dispatch(artists({name:alias}))
-       }
-      }
+        dispatch(artists({ name: alias }))
+      }}
     >
       <div className='w-full  relative overflow-hidden rounded-full hover:rounded-full'>
         {isShow && (

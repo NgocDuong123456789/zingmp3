@@ -1,4 +1,6 @@
 import { useRoutes } from 'react-router-dom'
+import 'react-toastify/dist/ReactToastify.css'
+
 import { path } from './contains/path'
 import { LayoutMain } from './Layouts/LayoutMain'
 import { Home } from './defaultPath'
@@ -12,7 +14,7 @@ import SearchPlayList from './pages/Search/Component/SearchPlayList/SearchPlayLi
 import { SearchArtist } from './pages/Search/Component/SearchArtist/SearchArtist'
 import Artists from './pages/Artists/Artists'
 import Top100 from './pages/Top100/Top100'
-import 'react-toastify/dist/ReactToastify.css'
+
 const Routes = () => {
   const router = useRoutes([
     {

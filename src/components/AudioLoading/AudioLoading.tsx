@@ -1,4 +1,4 @@
-import { Audio } from 'react-loader-spinner'
+import { Audio, RotatingLines } from 'react-loader-spinner'
 
 const AudioLoading = () => {
   return (
@@ -24,6 +24,18 @@ export const AudioLoadingSmall = () => {
       wrapperClass='wrapper-class'
       visible={true}
     />
+  )
+}
+
+export const AudioLoader = () => {
+  return (
+    <RotatingLines
+    strokeColor="grey"
+    strokeWidth="5"
+    animationDuration="0.75"
+    width="25"
+    visible={true}
+  />
   )
 }
 

@@ -1,8 +1,9 @@
 import { useDispatch, useSelector } from 'react-redux'
+import { useState } from 'react'
+
 import { Icons } from '~/helper/icons'
 import { playMusic } from '~/redux/SliceHome'
 import { musicId } from '~/redux/SliceMusic'
-import { useState } from 'react'
 import { RootState } from '~/redux/store'
 interface TypeProp {
   title: string

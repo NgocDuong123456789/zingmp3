@@ -1,5 +1,6 @@
 import { MusicProps } from '../../redux/SliceHome'
 import ItemSong from '../ItemSong/ItemSong'
+
 interface typeProps {
   data: MusicProps
 }

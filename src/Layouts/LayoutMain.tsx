@@ -1,7 +1,6 @@
 import { Helmet } from 'react-helmet-async'
 
 import { Sidebar, Header } from '../defaultPath'
-
 import { Player } from '~/components/Player/Player'
 interface Props {
   children: React.ReactNode

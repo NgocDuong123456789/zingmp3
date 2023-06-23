@@ -1,4 +1,4 @@
-import React from 'react'
+
 interface GenerateSideBarProps {
   children: React.ReactNode
   className?: string

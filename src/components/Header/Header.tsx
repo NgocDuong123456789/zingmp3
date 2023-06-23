@@ -1,17 +1,15 @@
-
+import { useContext, useState } from 'react'
+import { Link, useNavigate, createSearchParams } from 'react-router-dom'
 
 import { HeadlessTippy } from '../Tippy/Tippy'
 import { Icons } from '../../helper/icons'
-import { Link, useNavigate, createSearchParams } from 'react-router-dom'
 import { path } from '../../contains/path'
-import { useContext, useState } from 'react'
 import { AppContext } from '~/useContext/Context'
 import { GenerateSideBar } from '../GenerateSideBar/GenerateSideBar'
 import { Button } from '../Button/Button'
-
 import { searchSong } from '../../redux/SliceHome'
-import { RootState, useAppDispatch } from '~/redux/store'
-// import { useSelector } from 'react-redux'
+import { useAppDispatch } from '~/redux/store'
+
 
 const Header = () => {
   const navigate = useNavigate()

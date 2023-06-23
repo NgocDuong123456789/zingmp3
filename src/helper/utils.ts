@@ -7,12 +7,14 @@ export const convertToDate = (number: number) => {
   return `${day}/${month}/${year}`
 }
 
+
 export const covertTime = (time: number) => {
   const mu = Math.floor(time / 60)
-  const s = Math.floor(time - mu*60) < 10 ? `0${Math.floor(time - mu*60)}` : Math.floor(time - mu*60)
+  const s = Math.floor(time - mu * 60) < 10 ? `0${Math.floor(time - mu * 60)}` : Math.floor(time - mu * 60)
 
   return `0${mu}:${s}`
 }
+
 
 export const convertLike = (number: number) => {
   if (number < 1000) {
@@ -23,15 +25,15 @@ export const convertLike = (number: number) => {
     return `${Math.floor(number / 10000)}M`
   }
 }
-export const  convertNumberToTime=(number:number)=> {
-  
-  if(number >= 3600){
-    const hours = Math.floor(number / 3600); // Số giờ
-    const minutes = number % 60; // Số phút
-    return hours + " giờ " + minutes + " phút";
-  }else {
-    const hours = Math.floor(number / 60); // Số giờ
-    const minutes = number % 60; // Số phút
-    return hours + " phút " + minutes + " giây ";
+
+export const convertNumberToTime = (number: number) => {
+  if (number >= 3600) {
+    const hours = Math.floor(number / 3600) // Số giờ
+    const minutes = number % 60 // Số phút
+    return `${hours} giờ ${minutes} phút`
+  } else {
+    const hours = Math.floor(number / 60) // Số giờ
+    const minutes = number % 60 // Số phút
+    return `${hours} phút ${minutes} giây`
   }
 }

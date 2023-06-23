@@ -1,7 +1,9 @@
 import { AsyncThunk, PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+
 import https from '../apis/https'
 import { playList } from '~/types/playList.types'
 import { songProp } from '~/types/song.types'
+
 type GenericAsyncThunk = AsyncThunk<unknown, unknown, any>
 type PendingAction = ReturnType<GenericAsyncThunk['pending']>
 type RejectedAction = ReturnType<GenericAsyncThunk['rejected']>
@@ -66,7 +68,6 @@ export interface art {
   encodeId: string
   link: string
   id?: string
-
   sortDescription: string
   thumbnail: string
   thumbnailM: string
@@ -121,8 +122,11 @@ interface initialState {
     videos: SearchVideosType[]
   }
   artists: artistsType
-  isLoading: boolean
-  RequestId: undefined | string
+ isLoadingHome: boolean
+  isLoadingSearch: boolean
+  isLoadingSong: boolean
+  isLoadingArtists:boolean;
+  isLoadingDetailplaylist:boolean
 }
 
 const initialState: initialState = {
@@ -193,8 +197,12 @@ const initialState: initialState = {
     totalFollow: 0,
     sections: []
   },
-  isLoading: false,
-  RequestId: undefined
+
+  isLoadingHome: false,
+  isLoadingSearch: false,
+  isLoadingSong: false,
+  isLoadingArtists:false,
+  isLoadingDetailplaylist:false
 }
 
 export const fetchHome = createAsyncThunk('home', async (_, thunkAPI) => {
@@ -285,53 +293,92 @@ export const homeSlice = createSlice({
 
   extraReducers: (builder) => {
     builder
+      .addCase(fetchHome.pending, (state) => {
+        state.isLoadingHome = true
+      })
       .addCase(fetchHome.fulfilled, (state, action) => {
         if (action.payload !== undefined) {
           state.banner = action?.payload?.data?.items?.find((item: any) => item?.sectionId === 'hSlider')?.items
-          state.friday = action?.payload?.data?.items?.find((item: any) => item?.sectionId === 'hArtistTheme')
-          state.newEveryMusic = action?.payload?.data?.items?.find((item: any) => item?.sectionId === 'hEditorTheme2')
-          state.top100 = action?.payload?.data?.items?.find((item: any) => item?.sectionId === 'h100')
-          state.alBumHot = action?.payload?.data?.items?.find((item: any) => item?.sectionId === 'hAlbum')
-          state.newRelease = action?.payload?.data?.items?.find((item: any) => item?.sectionType === 'new-release')
+           state.friday = action?.payload?.data?.items?.find((item: any) => item?.sectionId === 'hArtistTheme')
+           state.newEveryMusic = action?.payload?.data?.items?.find((item: any) => item?.sectionId === 'hEditorTheme2')
+           state.top100 = action?.payload?.data?.items?.find((item: any) => item?.sectionId === 'h100')
+           state.alBumHot = action?.payload?.data?.items?.find((item: any) => item?.sectionId === 'hAlbum')
+           state.newRelease = action?.payload?.data?.items?.find((item: any) => item?.sectionType === 'new-release')
         }
+        state.isLoadingHome = false
+      })
+      .addCase(fetchHome.rejected, (state) => {
+        state.isLoadingHome = false
       })
 
+      .addCase(detailplaylist.pending, (state) => {
+        state.isLoadingDetailplaylist=true
+      })
       .addCase(detailplaylist.fulfilled, (state, action) => {
         state.detailplaylist = action.payload
+        state.isLoadingDetailplaylist=false
+      })
+      .addCase(detailplaylist.rejected, (state) => {
+        state.isLoadingDetailplaylist=false
+      })
+      .addCase(fetchSong.pending, (state) => {
+        state.isLoadingSong = true
       })
       .addCase(fetchSong.fulfilled, (state, action) => {
         if (action.payload !== undefined) {
           state.song = action?.payload
+          state.isLoadingSong = false
         }
+      })
+      .addCase(fetchSong.rejected, (state) => {
+        state.isLoadingSong = false
+      })
+      .addCase(searchSong.pending, (state, action) => {
+        state.isLoadingSearch = true
       })
       .addCase(searchSong.fulfilled, (state, action) => {
         if (action.payload !== undefined) {
           state.searchAll = action.payload.data
+          state.isLoadingSearch = false
         }
+      })
+      .addCase(searchSong.rejected, (state) => {
+        state.isLoadingSearch = false
+      })
+      .addCase(artists.pending, (state) => {
+        state.isLoadingArtists = true
       })
       .addCase(artists.fulfilled, (state, action) => {
         state.artists = action.payload.data
+        state.isLoadingArtists = false
       })
-      .addMatcher<FulfilledAction>(
-        (action) => action.type.endsWith('/pending'),
-        (state, action) => {
-          state.isLoading = true
-          state.RequestId = action.meta.requestId
-        }
-      )
-      
-      .addMatcher<PendingAction | RejectedAction>(
-        (action) => action.type.endsWith('/fulfilled') || action.type.endsWith('/rejected'),
-        (state, action) => {
-          if (state.isLoading && state.RequestId === action.meta.requestId) {
-            state.isLoading = false
-            state.RequestId = undefined
-          }
-        }
-      )
-      .addDefaultCase((state) => {
-        return state
+      .addCase(artists.rejected, (state) => {
+        state.isLoadingArtists =false
       })
+
+
+
+
+    // .addMatcher<FulfilledAction>(
+    //   (action) => action.type.endsWith('/pending'),
+    //   (state, action) => {
+    //     state.isLoading = true
+    //     state.RequestId = action.meta.requestId
+    //   }
+    // )
+
+    // .addMatcher<PendingAction | RejectedAction>(
+    //   (action) => action.type.endsWith('/fulfilled') || action.type.endsWith('/rejected'),
+    //   (state, action) => {
+    //     if (state.isLoading && state.RequestId === action.meta.requestId) {
+    //       state.isLoading = false
+    //       state.RequestId = undefined
+    //     }
+    //   }
+    // )
+    .addDefaultCase((state) => {
+      return state
+    })
   }
 })
 

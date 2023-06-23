@@ -2,7 +2,7 @@ import axios from 'axios'
 import { RemoveLocal, getAccessToken, getProfile } from '~/helper/localstore'
 
 const https = axios.create({
-  baseURL: 'http://localhost:5000'
+  baseURL: 'https://api-zingmp3-xi.vercel.app'
 })
 // let access_token = getAccessToken()
 // let profile = getProfile()

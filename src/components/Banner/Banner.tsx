@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+
 import { useAppDispatch, RootState } from '~/redux/store'
 import { detailplaylist, fetchHome, playAlbum, playMusic } from '../../redux/SliceHome'
 import { musicId } from '~/redux/SliceMusic'
-import { useNavigate } from 'react-router-dom'
+
 
 
 interface banner {
@@ -21,11 +23,9 @@ export const Banner = () => {
   const dis = useDispatch()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const homeList = useSelector((state: RootState) => state?.home)
+  const homeList = useSelector((state: RootState) => state?.home?.banner)
 
-  useEffect(() => {
-    dispatch(fetchHome())
-  }, [])
+
   let min = 0
   let max = 2
   useEffect(() => {
@@ -68,8 +68,8 @@ export const Banner = () => {
   }
   return (
  
- <div className='w-full gap-4 flex items-center overflow-hidden rounded-lg relative mt-[80px] cursor-pointer'>
-      {homeList?.banner?.map((item: banner, index: number) => (
+ <div className='w-full gap-4 flex items-center overflow-hidden rounded-lg relative mt-[40px] cursor-pointer'>
+      {homeList?.map((item: banner, index: number) => (
         <img
           src={item?.banner}
           alt='ảnh banner'
