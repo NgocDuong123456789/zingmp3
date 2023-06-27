@@ -11,7 +11,7 @@ import { playMusic } from '~/redux/SliceHome'
 import AlbumItem from '~/components/AlbumItem/AlbumItem'
 import { Skeleton } from '~/components/Skeleton/Skeleton'
 
-export const Abum = () => {
+ const Album = () => {
 
   const dispatch = useDispatch()
   const [codeId, setCodeId] = useState<string>('')
@@ -123,3 +123,4 @@ export const Abum = () => {
     </div>
   )
 }
+export default Album

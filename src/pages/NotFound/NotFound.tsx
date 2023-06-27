@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 
-export const NotFound = () => {
+const NotFound = () => {
   return (
     <section className='bg-[#2F2739] relative z-10 py-[120px] h-[100vh]'>
       <div className='container mx-auto'>
@@ -33,3 +33,5 @@ export const NotFound = () => {
     </section>
   )
 }
+
+export default NotFound

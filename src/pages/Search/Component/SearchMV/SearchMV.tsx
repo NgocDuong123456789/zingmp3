@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import MVItem from '~/components/MVItem/MVItem'
 import { RootState } from '~/redux/store'
 
-export const SearchMV = () => {
+const SearchMV = () => {
   const mv = useSelector((state: RootState) => state.home.searchAll.videos)
   
 
@@ -29,3 +29,5 @@ export const SearchMV = () => {
       </div>)
      
 }
+
+export default SearchMV

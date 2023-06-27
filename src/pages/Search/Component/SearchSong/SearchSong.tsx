@@ -5,7 +5,7 @@ import AlbumItem from '~/components/AlbumItem/AlbumItem'
 import { RootState } from '~/redux/store'
 import { songProp } from '~/types/song.types'
 
-export const SearchSong = () => {
+ const SearchSong = () => {
   const searchSong = useSelector((state: RootState) => state.home.searchAll.songs)
   const [codeId, setCodeId] = useState<string>('')
   return (
@@ -33,3 +33,5 @@ export const SearchSong = () => {
     </div>
   )
 }
+
+export default SearchSong

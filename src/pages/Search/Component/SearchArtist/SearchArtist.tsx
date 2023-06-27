@@ -7,7 +7,7 @@ import { Icons } from '~/helper/icons'
 import { convertLike } from '~/helper/utils'
 import { RootState } from '~/redux/store'
 
-export const SearchArtist = () => {
+ const SearchArtist = () => {
   const artis = useSelector((state: RootState) => state.home?.searchAll?.artists)
 
 
@@ -45,3 +45,5 @@ export const SearchArtist = () => {
     </div>
   )
 }
+
+export default SearchArtist
