@@ -1,16 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
+
 interface musicIdProp {
-   id: null | string
- 
+  id: null | string
 }
 
 const initialState: musicIdProp = {
-  id: null,
-  
+  id: null
 }
 
- const counterSlice = createSlice({
+const counterSlice = createSlice({
   name: 'musicId',
   initialState,
   reducers: {

@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux'
-import {  useState } from 'react'
+import { useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 
 import AudioLoading from '../../components/AudioLoading/AudioLoading'
@@ -11,17 +11,15 @@ import { playMusic } from '~/redux/SliceHome'
 import AlbumItem from '~/components/AlbumItem/AlbumItem'
 import { Skeleton } from '~/components/Skeleton/Skeleton'
 
- const Album = () => {
-
+const Album = () => {
   const dispatch = useDispatch()
   const [codeId, setCodeId] = useState<string>('')
-   const play = useSelector((state: RootState) => state?.home?.play)
-  const playList = useSelector((state: RootState) => state?.home?.detailplaylist?.data
-  )
+  const play = useSelector((state: RootState) => state?.home?.play)
+  const playList = useSelector((state: RootState) => state?.home?.detailplaylist?.data)
   const isLoadingDetailplaylist = useSelector((state: RootState) => state?.home.isLoadingDetailplaylist)
   const isLoadingHome = useSelector((state: RootState) => state?.home.isLoadingHome)
-  console.log(isLoadingHome)
   
+
   const renderThumb = () => {
     const thumbStyle = {
       backgroundColor: '#4A4250',
@@ -32,7 +30,7 @@ import { Skeleton } from '~/components/Skeleton/Skeleton'
   }
   return (
     <div>
-      { isLoadingDetailplaylist || isLoadingHome ? (
+      {isLoadingDetailplaylist || isLoadingHome ? (
         <div className='px-4 mt-[100px]  w-full items-center grid grid-cols-3 gap-4'>
           <Skeleton />
           <Skeleton />

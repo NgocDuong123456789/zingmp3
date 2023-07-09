@@ -6,17 +6,18 @@ import homeSlice from './SliceHome'
 import countReducer from './SliceMusic'
 import storage from 'redux-persist/lib/storage'
 import searchHistoryReducer from './SliceSearchHistory'
+
 const persistConfig = {
   key: 'root',
   version: 1,
   storage
 }
+
 const rootReducer = combineReducers({
   musicReducer: countReducer,
-  searchHistory: searchHistoryReducer,
-});
+  searchHistory: searchHistoryReducer
+})
 
-// const persistedReducer = persistReducer(persistConfig, countReducer)
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 export const store = configureStore({
@@ -37,4 +38,5 @@ export const persistor = persistStore(store)
 export type AppDispatch = typeof store.dispatch
 export const useAppDispatch: () => AppDispatch = useDispatch
 export type RootState = ReturnType<typeof store.getState>
+
 export default store

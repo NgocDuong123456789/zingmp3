@@ -1,9 +1,8 @@
-import {  PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import https from '../apis/https'
 import { playList } from '~/types/playList.types'
 import { songProp } from '~/types/song.types'
-
 
 interface song {
   err: number
@@ -119,11 +118,11 @@ interface initialState {
     videos: SearchVideosType[]
   }
   artists: artistsType
- isLoadingHome: boolean
+  isLoadingHome: boolean
   isLoadingSearch: boolean
   isLoadingSong: boolean
-  isLoadingArtists:boolean;
-  isLoadingDetailplaylist:boolean
+  isLoadingArtists: boolean
+  isLoadingDetailplaylist: boolean
 }
 
 const initialState: initialState = {
@@ -159,8 +158,10 @@ const initialState: initialState = {
       320: ''
     }
   },
+
   play: false,
   alBum: false,
+
   newEveryMusic: {
     title: '',
     items: []
@@ -198,8 +199,8 @@ const initialState: initialState = {
   isLoadingHome: false,
   isLoadingSearch: false,
   isLoadingSong: false,
-  isLoadingArtists:false,
-  isLoadingDetailplaylist:false
+  isLoadingArtists: false,
+  isLoadingDetailplaylist: false
 }
 
 export const fetchHome = createAsyncThunk('home', async (_, thunkAPI) => {
@@ -232,10 +233,11 @@ export const detailplaylist = createAsyncThunk('detailplaylist', async (id: { id
       signal: thunkAPI.signal
     })
     return response?.data
-  } catch (error: any) {
+  } catch (error: any ) {
     if (error?.name === 'AxiosError') return thunkAPI.rejectWithValue(error.response?.data)
   }
 })
+
 
 export const fetchSong = createAsyncThunk('song', async (id: { id: string }, thunkAPI) => {
   try {
@@ -249,6 +251,7 @@ export const fetchSong = createAsyncThunk('song', async (id: { id: string }, thu
     if (error?.name === 'AxiosError') return thunkAPI.rejectWithValue(error.response?.data)
   }
 })
+
 export const searchSong = createAsyncThunk('search song', async (keyword: { keyword: string }, thunkAPI) => {
   try {
     const response = await https.get('/api/search', {
@@ -297,10 +300,10 @@ export const homeSlice = createSlice({
         if (action.payload !== undefined) {
           state.banner = action?.payload?.data?.items?.find((item: any) => item?.sectionId === 'hSlider')?.items
           state.friday = action?.payload?.data?.items?.find((item: any) => item?.sectionId === 'hArtistTheme')
-           state.newEveryMusic = action?.payload?.data?.items?.find((item: any) => item?.sectionId === 'hEditorTheme2')
-           state.top100 = action?.payload?.data?.items?.find((item: any) => item?.sectionId === 'h100')
-           state.alBumHot = action?.payload?.data?.items?.find((item: any) => item?.sectionId === 'hAlbum')
-           state.newRelease = action?.payload?.data?.items?.find((item: any) => item?.sectionType === 'new-release')
+          state.newEveryMusic = action?.payload?.data?.items?.find((item: any) => item?.sectionId === 'hEditorTheme2')
+          state.top100 = action?.payload?.data?.items?.find((item: any) => item?.sectionId === 'h100')
+          state.alBumHot = action?.payload?.data?.items?.find((item: any) => item?.sectionId === 'hAlbum')
+          state.newRelease = action?.payload?.data?.items?.find((item: any) => item?.sectionType === 'new-release')
         }
         state.isLoadingHome = false
       })
@@ -309,14 +312,14 @@ export const homeSlice = createSlice({
       })
 
       .addCase(detailplaylist.pending, (state) => {
-        state.isLoadingDetailplaylist=true
+        state.isLoadingDetailplaylist = true
       })
       .addCase(detailplaylist.fulfilled, (state, action) => {
         state.detailplaylist = action.payload
-        state.isLoadingDetailplaylist=false
+        state.isLoadingDetailplaylist = false
       })
       .addCase(detailplaylist.rejected, (state) => {
-        state.isLoadingDetailplaylist=false
+        state.isLoadingDetailplaylist = false
       })
       .addCase(fetchSong.pending, (state) => {
         state.isLoadingSong = true
@@ -350,28 +353,11 @@ export const homeSlice = createSlice({
         state.isLoadingArtists = false
       })
       .addCase(artists.rejected, (state) => {
-        state.isLoadingArtists =false
+        state.isLoadingArtists = false
       })
-    // .addMatcher<FulfilledAction>(
-    //   (action) => action.type.endsWith('/pending'),
-    //   (state, action) => {
-    //     state.isLoading = true
-    //     state.RequestId = action.meta.requestId
-    //   }
-    // )
-
-    // .addMatcher<PendingAction | RejectedAction>(
-    //   (action) => action.type.endsWith('/fulfilled') || action.type.endsWith('/rejected'),
-    //   (state, action) => {
-    //     if (state.isLoading && state.RequestId === action.meta.requestId) {
-    //       state.isLoading = false
-    //       state.RequestId = undefined
-    //     }
-    //   }
-    // )
-    .addDefaultCase((state) => {
-      return state
-    })
+      .addDefaultCase((state) => {
+        return state
+      })
   }
 })
 

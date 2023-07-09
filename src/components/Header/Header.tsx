@@ -14,30 +14,36 @@ import { searchSong } from '../../redux/SliceHome'
 import { RootState, useAppDispatch } from '~/redux/store'
 
 const Header = () => {
+
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const dis = useDispatch()
   const inputRef = useRef<HTMLInputElement>(null)
+
   const [isInputFocused, setIsInputFocused] = useState(false)
   const { authentication, profile } = useContext(AppContext)
   const [searchSongItem, setSearchSong] = useState<string>('')
+
   const dataSearchHistory = useSelector((state: RootState) => state?.music.searchHistory)
-  console.log(dataSearchHistory)
+
   const debouncedSearch = debounce((query) => {
     console.log(`Searching for: ${query}`)
   }, 500)
 
   const handleSearchSong = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.keyCode === 13) {
+
       dispatch(searchSong({ keyword: searchSongItem }))
       dis(searchHistory(searchSongItem))
       setIsInputFocused(false)
+      
       navigate({
         pathname: `${path.searchSong}/${path.All}`,
         search: createSearchParams({
           q: searchSongItem
         }).toString()
       })
+
       if (inputRef.current) {
         inputRef.current.blur()
       }
@@ -117,16 +123,17 @@ const Header = () => {
                         onMouseDown={(e) => {
                           e.stopPropagation()
                           dispatch(searchSong({ keyword: itemSearch }))
+
                           navigate({
                             pathname: `${path.searchSong}/${path.All}`,
                             search: createSearchParams({
                               q: itemSearch
                             }).toString()
                           })
-                          setSearchSong(itemSearch)
-                          // setSearchSong('')
+                           setSearchSong(itemSearch)
                         }}
                       >
+
                         <Icons.BiTrendingUp size={20} />
                         <span className='py-2'>{itemSearch}</span>
                       </div>

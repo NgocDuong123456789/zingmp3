@@ -11,19 +11,18 @@ import { songProp } from '../../types/song.types'
 import { musicId } from '~/redux/SliceMusic'
 import { AudioLoader } from '../AudioLoading/AudioLoading'
 
-let timer: any
-
 export const Player = () => {
+  const timerRef: React.MutableRefObject<NodeJS.Timer | null> = useRef(null)
   const [audio, setAudio] = useState<HTMLAudioElement>(new Audio())
   const thumb = useRef<HTMLDivElement>(null)
+  const volumeRef = useRef<any>(null)
   const [repeat, setRepeat] = useState<boolean>(false)
-  const [VolumeMedium, setVolumeMedium] = useState<number>(30)
+  const [VolumeMedium, setVolumeMedium] = useState<number>(100)
   const music = useSelector((state: RootState) => state?.music?.musicReducer)
   const home = useSelector((state: RootState) => state.home)
   const isLoadingSong = useSelector((state: RootState) => state.home?.isLoadingSong)
 
   const id = music.id as string
-
   const play = home.play
 
   const playAlbum = home.alBum
@@ -43,9 +42,10 @@ export const Player = () => {
           setDataSong(res?.data)
         }
       })
+
     dispatch(fetchSong({ id }))
       .unwrap()
-      .then((res) => {
+      .then((res: any) => {
         if (res?.err === 0) {
           audio.pause()
           setAudio(new Audio(res?.data?.['128']))
@@ -58,16 +58,17 @@ export const Player = () => {
   }, [id])
 
   useEffect(() => {
-    timer && clearInterval(timer)
+    timerRef.current && clearInterval(timerRef.current)
     audio.currentTime = 0
     // audio.load()
     audio.pause()
     if (play) {
       audio?.play()
 
-      timer = setInterval(() => {
+      timerRef.current = setInterval(() => {
         setCurrentTime(covertTime(audio.currentTime))
-        const percent = Math.round((audio?.currentTime * 10000) / (dataSong?.duration as number)) / 100
+
+        const percent = Math.round((audio?.currentTime / (dataSong?.duration as number)) * 100)
         ;(thumb?.current as HTMLDivElement).style.cssText = `right:${100 - percent}%`
       }, 1000)
     }
@@ -98,12 +99,10 @@ export const Player = () => {
     audio.addEventListener('ended', handleEnd)
     return () => audio.removeEventListener('ended', handleEnd)
   }, [audio, shift, repeat])
+
   const handleprogressbar = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (trackRef.current) {
-      const percent = Math.round(
-        ((e.clientX - trackRef.current.getBoundingClientRect().left) / trackRef.current.getBoundingClientRect().width) *
-          100
-      )
+      const percent = Math.round(((e.pageX - trackRef.current.offsetLeft) / trackRef.current.offsetWidth) * 100)
       if (thumb.current) {
         thumb.current.style.cssText = `right:${100 - percent}%`
         audio.currentTime = (audio.duration * percent) / 100
@@ -112,20 +111,17 @@ export const Player = () => {
   }
 
   const handleNextSong = () => {
-    if (playAlbum) {
-      const findIdSong = home.detailplaylist?.data?.song.items.findIndex((item: songProp) => item.encodeId === id)
-      dispatch(musicId(home.detailplaylist?.data?.song.items[findIdSong + 1].encodeId))
-      dis(playMusic(true))
-    }
+    const findIdSong = home.detailplaylist?.data?.song.items.findIndex((item: songProp) => item.encodeId === id)
+    dispatch(musicId(home.detailplaylist?.data?.song.items[findIdSong + 1].encodeId))
+    dis(playMusic(true))
   }
 
   const handlePrevSong = () => {
-    if (playAlbum) {
-      const findIdSong = home.detailplaylist?.data?.song.items.findIndex((item: songProp) => item.encodeId === id)
-      dispatch(musicId(home.detailplaylist?.data?.song.items[findIdSong - 1].encodeId))
-      dis(playMusic(true))
-    }
+    const findIdSong = home.detailplaylist?.data?.song.items.findIndex((item: songProp) => item.encodeId === id)
+    dispatch(musicId(home.detailplaylist?.data?.song.items[findIdSong - 1].encodeId))
+    dis(playMusic(true))
   }
+
   const handleRandomSong = () => {
     const randomIndexSong = Math.floor(Math.random() * home.detailplaylist?.data?.song.items.length) - 1
     dispatch(musicId(home.detailplaylist?.data?.song.items[randomIndexSong - 1]?.encodeId))
@@ -133,13 +129,14 @@ export const Player = () => {
   }
 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    volumeRef.current =Number(e.target.value)
     setVolumeMedium(Number(e.target.value))
   }
-  audio.volume = 0.3
+  
   useEffect(() => {
     audio.volume = VolumeMedium / 100
   }, [VolumeMedium])
-
+  
   return (
     <div className=' items-center grid grid-cols-7  bg-[rgb(19,12,28)] w-full h-[90px] text-[white] px-[1.75rem]  z-50 fixed bottom-0 '>
       {isLoadingSong ? (
@@ -167,7 +164,6 @@ export const Player = () => {
         <div className='flex items-center gap-4 col-span-2'>
           {dataSong ? (
             <>
-              {' '}
               <img src={dataSong?.thumbnail} alt='avatar sing' className='w-[50px] h-[50px] rounded-sm' />
               <div>
                 <h3 className='font-bold line-clamp-1'>{dataSong?.title}</h3>
@@ -248,7 +244,6 @@ export const Player = () => {
             {isLoadingSong ? (
               <>
                 <AudioLoader />
-                {/* {dis(playMusic(false))}  */}
               </>
             ) : play ? (
               <Icons.CgPlayPause size={25} />
@@ -276,7 +271,7 @@ export const Player = () => {
           </svg>
           <Icons.BsArrowRepeat
             size={23}
-            title='Bật phát lại 1 bài'
+            title='Chuyển bài tiếp theo'
             onClick={() => setRepeat((prev) => !prev)}
             className={classNames('w-6 h-6', {
               'fill-[#C273ED]': repeat,
@@ -303,8 +298,8 @@ export const Player = () => {
       </div>
       <div className='flex items-center justify-end gap-5 cursor-pointer col-span-2'>
         <div className='flex items-center gap-2'>
-          {VolumeMedium <= 0 ? (
-            <Icons.BsFillVolumeMuteFill size={25} onClick={() => setVolumeMedium(40)} />
+          {VolumeMedium === 0 ? (
+            <Icons.BsFillVolumeMuteFill size={25} onClick={() => setVolumeMedium(volumeRef.current || 40)} />
           ) : (
             <Icons.ImVolumeMedium size={25} onClick={() => setVolumeMedium(0)} />
           )}

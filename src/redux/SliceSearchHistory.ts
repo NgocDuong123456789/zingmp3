@@ -4,6 +4,7 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 interface musicIdProp {
   searchHistory: string[]
 }
+
 const initialState: musicIdProp = {
   searchHistory: []
 }
@@ -13,8 +14,8 @@ export const searchHistorySlice = createSlice({
   initialState,
   reducers: {
     searchHistory: (state, action: PayloadAction<string>) => {
-      if(state.searchHistory.includes(action.payload)){
-        return 
+      if (state.searchHistory.includes(action.payload)) {
+        return
       }
       state.searchHistory.push(action.payload)
     }

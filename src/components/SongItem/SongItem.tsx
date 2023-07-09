@@ -24,8 +24,7 @@ export const SongItem = ({ title, thumbnail, artistsNames, encodeId, time }: Son
           className='w-[70px] h-[70px] rounded-sm'
           aria-hidden='true'
           onClick={() => {
-
-           isLoadingSong ? dispatch(playMusic(false)) : dispatch(playMusic(true))
+            isLoadingSong ? dispatch(playMusic(false)) : dispatch(playMusic(true))
             dispatch(musicId(encodeId))
           }}
         />

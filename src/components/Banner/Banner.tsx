@@ -1,12 +1,10 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { useAppDispatch, RootState } from '~/redux/store'
 import { detailplaylist, playAlbum, playMusic } from '../../redux/SliceHome'
 import { musicId } from '~/redux/SliceMusic'
-
-
 
 interface banner {
   banner: string
@@ -20,37 +18,38 @@ interface banner {
   type: number
 }
 export const Banner = () => {
+  const intervalRef = useRef<any>(null)
   const dis = useDispatch()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const homeList = useSelector((state: RootState) => state?.home?.banner)
 
-
   let min = 0
   let max = 2
   useEffect(() => {
     const imageSlice = document.getElementsByClassName('image-slice')
-    const interval = setInterval(() => {
-      for (let i = 0; i < imageSlice.length; i++) {
-        if (i >= min && i <= max) {
-          ;(imageSlice[i] as HTMLImageElement).style.cssText = `display:block`
-        } else {
-          ;(imageSlice[i] as HTMLImageElement).style.cssText = 'display:none'
+    if (intervalRef.current) {
+      intervalRef.current = setInterval(() => {
+        for (let i = 0; i < imageSlice.length; i++) {
+          if (i >= min && i <= max) {
+            ;(imageSlice[i] as HTMLImageElement).style.cssText = `display:block`
+          } else {
+            ;(imageSlice[i] as HTMLImageElement).style.cssText = 'display:none'
+          }
         }
-      }
-      min++
-      max++
-      if (min > 3) min = 0
-      if (max > 5) max = 2
-    }, 4000)
+        min++
+        max++
+        if (min > 3) min = 0
+        if (max > 5) max = 2
+      }, 1000)
+    }
 
     return () => {
-      interval && clearInterval(interval)
+      intervalRef.current && clearInterval(intervalRef.current)
     }
   }, [])
 
   const handleClickBanner = (item: banner) => {
-   
     if (item.type === 1) {
       dis(musicId(item.encodeId))
       dis(playMusic(true))
@@ -66,8 +65,7 @@ export const Banner = () => {
     }
   }
   return (
- 
- <div className='w-full gap-4 flex items-center overflow-hidden rounded-lg relative mt-[40px] cursor-pointer'>
+    <div className='w-full gap-4 flex items-center overflow-hidden rounded-lg relative mt-[40px] cursor-pointer'>
       {homeList?.map((item: banner, index: number) => (
         <img
           src={item?.banner}
@@ -78,7 +76,6 @@ export const Banner = () => {
           onClick={() => handleClickBanner(item)}
         />
       ))}
-     
     </div>
   )
 }

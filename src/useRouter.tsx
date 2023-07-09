@@ -1,19 +1,11 @@
 import { useRoutes } from 'react-router-dom'
-import 'react-toastify/dist/ReactToastify.css'
 import { lazy, Suspense } from 'react'
+import 'react-toastify/dist/ReactToastify.css'
+
 import { path } from './contains/path'
 import { LayoutMain } from './Layouts/LayoutMain'
-// import  Home  from './pages/home/Home'
-// import  NotFound  from './pages/NotFound/NotFound'
-// import Album from './pages/Abum/Abum'
-// import SearchAll from './pages/Search/Component/SearchAll/SearchAll'
-// import { SearchSong } from './pages/Search/Component/SearchSong/SearchSong'
 import LayoutSearch from './pages/Search/LayoutSearch/LayoutSearch'
-// import { SearchMV } from './pages/Search/Component/SearchMV/SearchMV'
-// import SearchPlayList from './pages/Search/Component/SearchPlayList/SearchPlayList'
-//  import { SearchArtist } from './pages/Search/Component/SearchArtist/SearchArtist'
-// import Artists from './pages/Artists/Artists'
-// import Top100 from './pages/Top100/Top100'
+
 const Home = lazy(() => import('./pages/home/Home'))
 const NotFound = lazy(() => import('./pages/NotFound/NotFound'))
 const Top100 = lazy(() => import('./pages/Top100/Top100'))
@@ -24,6 +16,7 @@ const SearchArtist = lazy(() => import('./pages/Search/Component/SearchArtist/Se
 const SearchAll = lazy(() => import('./pages/Search/Component/SearchAll/SearchAll'))
 const SearchMV = lazy(() => import('./pages/Search/Component/SearchMV/SearchMV'))
 const SearchSong = lazy(() => import('./pages/Search/Component/SearchSong/SearchSong'))
+
 const Routes = () => {
   const router = useRoutes([
     {

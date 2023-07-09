@@ -3,11 +3,13 @@ import { Helmet } from 'react-helmet-async'
 import  Sidebar from '../components/Sidebar/Sidebar'
 import Header from '../components/Header/Header'
 import { Player } from '~/components/Player/Player'
+
 interface Props {
   children: React.ReactNode
   title: string
   description?: string
 }
+
 export const LayoutMain = ({ children, title, description }: Props) => {
   return (
     <div className='w-full grid grid-cols-12  '>
