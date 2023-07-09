@@ -15,7 +15,8 @@ export const Player = () => {
   const timerRef: React.MutableRefObject<NodeJS.Timer | null> = useRef(null)
   const [audio, setAudio] = useState<HTMLAudioElement>(new Audio())
   const thumb = useRef<HTMLDivElement>(null)
-  const volumeRef = useRef<any>(null)
+  const volumeRef = useRef<number | null>(null)
+  const progressbarRef = useRef<number | null>(null)
   const [repeat, setRepeat] = useState<boolean>(false)
   const [VolumeMedium, setVolumeMedium] = useState<number>(100)
   const music = useSelector((state: RootState) => state?.music?.musicReducer)
@@ -59,7 +60,8 @@ export const Player = () => {
 
   useEffect(() => {
     timerRef.current && clearInterval(timerRef.current)
-    audio.currentTime = 0
+    //  audio.currentTime = 0
+    let percent = 0
     // audio.load()
     audio.pause()
     if (play) {
@@ -67,9 +69,10 @@ export const Player = () => {
 
       timerRef.current = setInterval(() => {
         setCurrentTime(covertTime(audio.currentTime))
-
-        const percent = Math.round((audio?.currentTime / (dataSong?.duration as number)) * 100)
-        ;(thumb?.current as HTMLDivElement).style.cssText = `right:${100 - percent}%`
+        percent = (audio?.currentTime / (dataSong?.duration as number)) * 100
+        progressbarRef.current = percent
+        
+        ;(thumb?.current as HTMLDivElement).style.cssText = `right:${100 - progressbarRef.current}%`
       }, 1000)
     }
   }, [audio, play])
@@ -87,9 +90,19 @@ export const Player = () => {
   useEffect(() => {
     const handleEnd = () => {
       if (shift) {
-        handleRandomSong()
+        if (home.detailplaylist?.data?.song.items.length === 0) {
+          dis(playMusic(false))
+          audio.pause()
+        } else {
+          handleRandomSong()
+        }
       } else if (repeat) {
-        handleNextSong()
+        if (home.detailplaylist?.data?.song.items.length === 0) {
+          dis(playMusic(false))
+          audio.pause()
+        } else {
+          handleNextSong()
+        }
       } else {
         dis(playMusic(false))
         audio.pause()
@@ -102,7 +115,7 @@ export const Player = () => {
 
   const handleprogressbar = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (trackRef.current) {
-      const percent = Math.round(((e.pageX - trackRef.current.offsetLeft) / trackRef.current.offsetWidth) * 100)
+      const percent = ((e.pageX - trackRef.current.offsetLeft) / trackRef.current.offsetWidth) * 100
       if (thumb.current) {
         thumb.current.style.cssText = `right:${100 - percent}%`
         audio.currentTime = (audio.duration * percent) / 100
@@ -121,7 +134,7 @@ export const Player = () => {
     dispatch(musicId(home.detailplaylist?.data?.song.items[findIdSong - 1].encodeId))
     dis(playMusic(true))
   }
-
+  console.log(home.detailplaylist?.data?.song.items.length)
   const handleRandomSong = () => {
     const randomIndexSong = Math.floor(Math.random() * home.detailplaylist?.data?.song.items.length) - 1
     dispatch(musicId(home.detailplaylist?.data?.song.items[randomIndexSong - 1]?.encodeId))
@@ -129,14 +142,14 @@ export const Player = () => {
   }
 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    volumeRef.current =Number(e.target.value)
+    volumeRef.current = Number(e.target.value)
     setVolumeMedium(Number(e.target.value))
   }
-  
+
   useEffect(() => {
     audio.volume = VolumeMedium / 100
   }, [VolumeMedium])
-  
+
   return (
     <div className=' items-center grid grid-cols-7  bg-[rgb(19,12,28)] w-full h-[90px] text-[white] px-[1.75rem]  z-50 fixed bottom-0 '>
       {isLoadingSong ? (
